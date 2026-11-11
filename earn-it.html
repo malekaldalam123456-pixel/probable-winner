@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>EARN IT</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b0b0d">
+<meta name="description" content="EARN IT: turn real tasks into a virtual economy, with focus sessions, streaks, achievements and a customization store.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#0b0b0d;--panel:rgba(255,255,255,.05);--line:rgba(255,255,255,.12);--text:#f5f2ea;--muted:#a19b8f;--gold:#d4af37;--gold2:#f6e27a;--green:#34c77b;--red:#f0565b;color-scheme:dark}
+[data-theme=light]{--bg:#f7f5ef;--panel:rgba(255,255,255,.85);--line:rgba(0,0,0,.12);--text:#17150f;--muted:#6d675a;--green:#15834d;--red:#c62f35;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,"Noto Naskh Arabic",sans-serif;line-height:1.5;color:var(--text);background:radial-gradient(900px 500px at 85% -10%,rgba(212,175,55,.14),transparent 60%),var(--bg)}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 20px;position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;letter-spacing:.12em;font-size:1.2rem;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;border-bottom:1px solid var(--line)}
+main{max-width:1100px;margin-inline:auto;padding:18px 20px 100px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.two{grid-template-columns:1fr 1fr}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:14px;backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,.22)}
+.grid>.card,.two>.card{margin-top:0}
+.stat small{color:var(--muted)}
+.stat b{display:block;font-size:1.3rem;margin-top:4px}
+.pos{color:var(--green)}.neg{color:var(--red)}.muted{color:var(--muted);font-size:.9rem}
+button{font:inherit;cursor:pointer;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;white-space:nowrap}
+button:hover:not(:disabled){border-color:var(--gold)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#15120a;border:0;font-weight:700}
+button.danger{color:var(--red)}
+nav button[aria-current=page]{border-color:var(--gold);color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input,select{font:inherit;color:var(--text);background:transparent;border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0;max-width:100%}
+form{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+form label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.done{opacity:.55}.done b{text-decoration:line-through}
+.tag{font-size:.75rem;padding:2px 9px;border-radius:99px;border:1px solid var(--line);display:inline-block}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .4s ease}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:start;white-space:nowrap}
+h3{margin:.1rem 0 .7rem;font-size:1.05rem}
+.banner{margin-top:14px;padding:12px 16px;border-radius:14px;border:1px solid var(--red);color:var(--red)}
+#toast{position:fixed;bottom:18px;inset-inline:18px;max-width:380px;margin-inline:auto;padding:12px 16px;border-radius:14px;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(12px);opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none}
+#toast.show{opacity:1;transform:none}
+#toast.ok{border-color:var(--green)}#toast.err{border-color:var(--red)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.badge{display:flex;flex-direction:column;gap:2px;min-width:118px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);font-size:.85rem;background:var(--panel)}
+.badge.off{opacity:.35;filter:grayscale(1)}
+.r-common{border-color:#8d8d8d}.r-rare{border-color:#4f8ff7}.r-epic{border-color:#a855f7}
+.r-legendary{border-color:var(--gold);box-shadow:0 0 18px rgba(212,175,55,.35)}
+.modal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px)}
+.modal[hidden]{display:none}
+.panel{width:min(460px,100%);padding:20px;border-radius:20px;background:var(--bg);border:1px solid var(--line);box-shadow:0 24px 70px rgba(0,0,0,.5)}
+.panel form{flex-direction:column;align-items:stretch}
+.tbtn{margin-inline-start:8px;padding:4px 10px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent}
+.ctitle{color:var(--gold);font-size:.85rem;font-weight:600}
+.sw{display:block;width:100%;height:46px;border-radius:12px;margin-bottom:10px}
+.cos{display:flex;flex-direction:column;gap:4px}
+body[data-amb=amb_aurora]{background:radial-gradient(60% 50% at 15% 0%,rgba(52,199,123,.22),transparent 70%),radial-gradient(50% 40% at 90% 10%,rgba(59,130,246,.2),transparent 70%),var(--bg)}
+body[data-amb=amb_stars]{background-color:var(--bg);background-image:radial-gradient(1px 1px at 20px 30px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 90px 80px,rgba(255,255,255,.6),transparent),radial-gradient(1.5px 1.5px at 150px 50px,rgba(255,255,255,.9),transparent);background-size:170px 130px}
+.timer{font-size:4.5rem;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:.04em;background:linear-gradient(90deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.focus{display:flex;flex-direction:column;gap:12px}
+#fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:30}
+#fx .p{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;animation:fall 1.6s ease-in forwards}
+#fx .spark{width:7px;height:7px;border-radius:50%;top:42%;animation:burst 1.1s ease-out forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(540deg);opacity:0}}
+@keyframes burst{to{transform:translate(var(--dx),-70px) scale(.2);opacity:0}}
+body[data-amb=amb_grid]{background-color:var(--bg);background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:36px 36px}
+body[data-amb=amb_ember]{background:radial-gradient(70% 55% at 50% 110%,rgba(249,115,22,.35),transparent 70%),var(--bg)}
+.chip{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.72rem;padding:2px 7px;border-radius:99px;border:1px solid var(--line);margin:2px 2px 2px 0}
+.chip.done{border-color:var(--green)}.chip.due{border-color:var(--gold)}.chip.late{border-color:var(--red);color:var(--red)}.chip.focus{border-color:#60a5fa}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:10px}
+.cell{display:flex;flex-direction:column;align-items:stretch;text-align:start;min-height:84px;padding:6px;border-radius:12px;border:1px solid var(--line);background:var(--panel);overflow:hidden;color:var(--text);font:inherit;cursor:default}
+button.cell{cursor:pointer}.cell.out{opacity:.4}.cell.today{border-color:var(--gold)}.cell b{font-size:.85rem}
+.hb{display:grid;grid-template-columns:120px 1fr auto;gap:10px;align-items:center;margin:8px 0}
+.prof-head{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.profile-form{display:flex;gap:8px;align-items:flex-end;margin-top:10px}
+.btn-like{display:inline-block;cursor:pointer;padding:8px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.hav{background:none;border:0;padding:0;cursor:pointer}
+.frame{position:relative;display:inline-block;border-radius:50%;padding:4px;isolation:isolate}
+.frame::before{content:"";position:absolute;inset:0;border-radius:50%;z-index:-1;display:none}
+.frame.f-gold::before,.frame.f-flame::before,.frame.f-crystal::before{display:block}
+.frame.f-gold::before{background:conic-gradient(#d4af37,#f6e27a,#b8860b,#f6e27a,#d4af37);animation:spin 4s linear infinite}
+.frame.f-flame::before{background:conic-gradient(#f97316,#ef4444,#fde047,#f97316);animation:spin 2.5s linear infinite,glow 1.6s ease-in-out infinite}
+.frame.f-crystal::before{background:conic-gradient(#38bdf8,#a78bfa,#34d399,#38bdf8);animation:spin 6s linear infinite}
+.avatar{border-radius:50%;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#15120a;font-weight:800;animation:breathe 4s ease-in-out infinite}
+.avatar img{width:100%;height:100%;object-fit:cover}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 4px rgba(249,115,22,.5))}50%{filter:drop-shadow(0 0 14px rgba(249,115,22,.95))}}
+@media(prefers-reduced-motion:reduce){.frame::before,.avatar{animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div><span class="brand">EARN IT</span> <span class="ctitle" id="ctitle"></span> <span class="muted" id="tag"></span></div>
+  <div class="actions"><span id="hav"></span><button type="button" data-act="lang" id="langBtn"></button><button type="button" data-act="theme" id="themeBtn"></button></div>
+</header>
+<nav id="nav" aria-label="Main"></nav>
+<main id="app"></main>
+<div id="modal" class="modal" hidden></div>
+<div id="fx" aria-hidden="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+const KEY = 'earnit.v1', PREF = 'earnit.prefs';
+const DIFF = { easy:[1000,2500], medium:[2500,6000], hard:[6000,12000], expert:[12000,25000], legendary:[25000,50000] };
+const CATS = ['entertainment','gaming','food_drinks','lifestyle','personal','learning','custom'];
+const FILTERS = { all:'all', pending:'pending', completed:'done', overdue:'overdue' };
+
+const STR = {
+ar: {
+  tagline:'حياتك… اقتصادك… قواعدك', lang:'English', toLight:'الوضع الفاتح', toDark:'الوضع الداكن',
+  nav:{dashboard:'الرئيسية',tasks:'المهام',shop:'المتجر',savings:'الادخار',wallet:'المحفظة'},
+  balance:'الرصيد المتاح', lifetime:'إجمالي الأرباح', saved:'إجمالي المدخرات', spending:'إجمالي الإنفاق', todayEarn:'أرباح اليوم', completion:'إنجاز اليوم',
+  done:'مكتملة', pending:'قيد التنفيذ', overdue:'متأخرة', recent:'آخر المعاملات', upcoming:'المواعيد القادمة', quick:'إجراءات سريعة', none:'لا توجد بيانات بعد',
+  title:'عنوان المهمة', difficulty:'الصعوبة', reward:'المكافأة (ج.م)', due:'تاريخ الاستحقاق', add:'إضافة', complete:'إكمال', delete:'حذف', archive:'أرشفة', all:'الكل',
+  noTasks:'لا توجد مهام بعد', added:'تمت الإضافة', completedMsg:'اكتملت المهمة وأُضيفت المكافأة', deleted:'تم حذف المهمة',
+  pendingOnly:'المهام المكتملة تبقى في السجل ولا يمكن حذفها',
+  easy:'سهلة', medium:'متوسطة', hard:'صعبة', expert:'خبير', legendary:'أسطورية',
+  newReward:'مكافأة جديدة', rewardName:'اسم المكافأة', category:'الفئة', price:'السعر (ج.م)', buy:'شراء', redeem:'استلام',
+  purchases:'مشترياتي', noRewards:'أضف مكافآت لتبدأ التسوق', bought:'تمت عملية الشراء', redeemed:'تم تسجيل الاستلام', archived:'تمت أرشفة المكافأة',
+  dup:'هذه العملية سُجلت من قبل ولم تُخصم مرة أخرى', confirmBuy:'هل تريد شراء هذه المكافأة بالرصيد؟', purchased:'مشتراة', statusRedeemed:'مستلمة',
+  cats:{entertainment:'ترفيه',gaming:'ألعاب',food_drinks:'طعام ومشروبات',lifestyle:'نمط حياة',personal:'شخصية',learning:'تعلم',custom:'مخصصة'},
+  newGoal:'هدف ادخار جديد', goal:'اسم الهدف', target:'المبلغ المستهدف (ج.م)', targetDate:'تاريخ الهدف', deposit:'إيداع', withdraw:'سحب', amount:'المبلغ',
+  goalDone:'تم بلوغ الهدف 🎉', noGoals:'لا توجد أهداف ادخار بعد', goalAdded:'تم إنشاء الهدف', depOk:'تم الإيداع في الهدف', wdOk:'تم السحب إلى الرصيد المتاح',
+  date:'التاريخ', type:'النوع', desc:'الوصف', amountCol:'المبلغ', after:'الرصيد بعدها', noLedger:'لا توجد معاملات بعد',
+  exportData:'تصدير البيانات', exported:'تم تصدير البيانات', resetData:'مسح البيانات', resetConfirm:'سيتم حذف كل البيانات على هذا المتصفح نهائياً. هل أنت متأكد؟', resetDone:'تم مسح البيانات',
+  ltype:{task_reward:'مكافأة مهمة',shop_purchase:'شراء',savings_deposit:'إيداع ادخار',savings_withdrawal:'سحب ادخار'},
+  err:{insufficient:'الرصيد غير كافٍ', invalid:'البيانات غير صالحة', notfound:'العنصر غير موجود', already:'هذه المهمة مكتملة ومُكافأة بالفعل',
+       exceeds:'المبلغ يتجاوز المتبقي للهدف', savedLow:'المبلغ المدخر في الهدف أقل من المطلوب', notActive:'هذا الهدف غير نشط',
+       storage:'تعذّر الحفظ في هذا المتصفح، ولم يتغير شيء', corrupt:'البيانات المحفوظة كانت تالفة؛ تم حفظ نسخة احتياطية وبدأنا من جديد'}
+},
+en: {
+  tagline:'Your life… your economy… your rules', lang:'العربية', toLight:'Light mode', toDark:'Dark mode',
+  nav:{dashboard:'Dashboard',tasks:'Tasks',shop:'Shop',savings:'Savings',wallet:'Wallet'},
+  balance:'Available balance', lifetime:'Lifetime earnings', saved:'Total savings', spending:'Total spending', todayEarn:"Today's earnings", completion:"Today's completion",
+  done:'Completed', pending:'Pending', overdue:'Overdue', recent:'Recent transactions', upcoming:'Upcoming deadlines', quick:'Quick actions', none:'No data yet',
+  title:'Task title', difficulty:'Difficulty', reward:'Reward (EGP)', due:'Due date', add:'Add', complete:'Complete', delete:'Delete', archive:'Archive', all:'All',
+  noTasks:'No tasks yet', added:'Added', completedMsg:'Task completed and reward added', deleted:'Task deleted',
+  pendingOnly:'Completed tasks stay in history and cannot be deleted',
+  easy:'Easy', medium:'Medium', hard:'Hard', expert:'Expert', legendary:'Legendary',
+  newReward:'New reward', rewardName:'Reward name', category:'Category', price:'Price (EGP)', buy:'Buy', redeem:'Redeem',
+  purchases:'My purchases', noRewards:'Add rewards to start shopping', bought:'Purchase complete', redeemed:'Redemption recorded', archived:'Reward archived',
+  dup:'This operation was already recorded and was not charged again', confirmBuy:'Buy this reward with your balance?', purchased:'Purchased', statusRedeemed:'Redeemed',
+  cats:{entertainment:'Entertainment',gaming:'Gaming',food_drinks:'Food & drinks',lifestyle:'Lifestyle',personal:'Personal',learning:'Learning',custom:'Custom'},
+  newGoal:'New savings goal', goal:'Goal name', target:'Target amount (EGP)', targetDate:'Target date', deposit:'Deposit', withdraw:'Withdraw', amount:'Amount',
+  goalDone:'Goal reached 🎉', noGoals:'No savings goals yet', goalAdded:'Goal created', depOk:'Deposited into goal', wdOk:'Moved back to available balance',
+  date:'Date', type:'Type', desc:'Description', amountCol:'Amount', after:'Balance after', noLedger:'No transactions yet',
+  exportData:'Export data', exported:'Data exported', resetData:'Erase data', resetConfirm:'All data on this browser will be permanently deleted. Are you sure?', resetDone:'Data erased',
+  ltype:{task_reward:'Task reward',shop_purchase:'Purchase',savings_deposit:'Savings deposit',savings_withdrawal:'Savings withdrawal'},
+  err:{insufficient:'Insufficient balance', invalid:'Invalid input', notfound:'Item not found', already:'This task is already completed and rewarded',
+       exceeds:'Amount exceeds the remaining target', savedLow:'Not enough saved in this goal', notActive:'This goal is not active',
+       storage:'Could not save in this browser. Nothing was changed', corrupt:'Saved data was corrupted; a backup was kept and the app started fresh'}
+}};
+
+const STR_X = {
+ar:{undo:'تراجع',undone:'تم التراجع عن الإكمال',refunded:'تم استرداد قيمة المشتريات',statusRefunded:'مُستردة',
+edit:'تعديل',duplicate:'نسخ',postpone:'تأجيل يوماً',copySuffix:' (نسخة)',duplicated:'تم نسخ المهمة',postponed:'تم تأجيل المهمة يوماً',
+editTask:'تعديل المهمة',save:'حفظ',cancel:'إلغاء',ok:'تأكيد',savedOk:'تم الحفظ',deleteConfirm:'حذف هذه المهمة نهائياً؟',
+search:'ابحث في المهام…',sort:'ترتيب',sortDue:'الموعد',sortReward:'المكافأة',sortTitle:'الاسم',
+level:'المستوى',xp:'نقطة خبرة',nextLevel:'للمستوى التالي',maxLevel:'أعلى مستوى',
+streak:'سلسلة الأيام',days:'يوماً متتالياً',weekly:'أرباح آخر 7 أيام',achievements:'الإنجازات',levelUp:'ارتفع مستواك إلى',
+exportCsv:'تصدير CSV',csvDone:'تم تصدير ملف CSV',shortcuts:'اختصارات: N مهمة جديدة · / بحث · Esc إغلاق',
+titles:{beginner:'مبتدئ',apprentice:'متدرب',achiever:'طموح',explorer:'مستكشف',professional:'محترف',expert:'خبير',master:'سيّد',elite:'نخبة',champion:'بطل',legend:'أسطورة'},
+rarity:{common:'عادي',rare:'نادر',epic:'ملحمي',legendary:'أسطوري'},
+ltype:{task_reward:'مكافأة مهمة',shop_purchase:'شراء',savings_deposit:'إيداع ادخار',savings_withdrawal:'سحب ادخار',reversal:'تراجع عن مكافأة',refund:'استرداد شراء'},
+ach:{first:{n:'أولى الخطوات',d:'أكمل أول مهمة'},ten:{n:'منجز',d:'أكمل 10 مهام'},earn100:{n:'أول 100',d:'اجمع 100 ج.م'},earn1000:{n:'ألف جنيه',d:'اجمع 1000 ج.م'},earn10000:{n:'عشرة آلاف',d:'اجمع 10000 ج.م'},streak7:{n:'أسبوع متصل',d:'حافظ على سلسلة 7 أيام'},level10:{n:'مستوى 10',d:'بلغ المستوى 10'},level50:{n:'القمة',d:'بلغ المستوى 50'},saver:{n:'مدّخر',d:'أكمل هدف ادخار'}},
+err:{completedLocked:'لا يمكن تعديل مهمة مكتملة'}},
+en:{undo:'Undo',undone:'Completion undone',refunded:'Purchase refunded',statusRefunded:'Refunded',
+edit:'Edit',duplicate:'Duplicate',postpone:'Postpone 1 day',copySuffix:' (copy)',duplicated:'Task duplicated',postponed:'Postponed by one day',
+editTask:'Edit task',save:'Save',cancel:'Cancel',ok:'Confirm',savedOk:'Saved',deleteConfirm:'Delete this task permanently?',
+search:'Search tasks…',sort:'Sort',sortDue:'Due date',sortReward:'Reward',sortTitle:'Title',
+level:'Level',xp:'XP',nextLevel:'to next level',maxLevel:'Max level',
+streak:'Day streak',days:'days in a row',weekly:'Earnings, last 7 days',achievements:'Achievements',levelUp:'Level up! You reached level',
+exportCsv:'Export CSV',csvDone:'CSV exported',shortcuts:'Shortcuts: N new task · / search · Esc close',
+titles:{beginner:'Beginner',apprentice:'Apprentice',achiever:'Achiever',explorer:'Explorer',professional:'Professional',expert:'Expert',master:'Master',elite:'Elite',champion:'Champion',legend:'Legend'},
+rarity:{common:'Common',rare:'Rare',epic:'Epic',legendary:'Legendary'},
+ltype:{task_reward:'Task reward',shop_purchase:'Purchase',savings_deposit:'Savings deposit',savings_withdrawal:'Savings withdrawal',reversal:'Reward reversal',refund:'Purchase refund'},
+ach:{first:{n:'First steps',d:'Complete your first task'},ten:{n:'Achiever',d:'Complete 10 tasks'},earn100:{n:'First 100',d:'Earn 100 EGP'},earn1000:{n:'Thousand',d:'Earn 1,000 EGP'},earn10000:{n:'Ten thousand',d:'Earn 10,000 EGP'},streak7:{n:'Unbroken week',d:'Keep a 7-day streak'},level10:{n:'Level 10',d:'Reach level 10'},level50:{n:'Summit',d:'Reach level 50'},saver:{n:'Saver',d:'Complete a savings goal'}},
+err:{completedLocked:'Completed tasks cannot be edited'}}
+};
+for (const l of Object.keys(STR_X)) { const { err, ...rest } = STR_X[l]; Object.assign(STR[l], rest); Object.assign(STR[l].err, err); }
+
+const XPD = { easy:10, medium:25, hard:50, expert:100, legendary:200 };
+const TITLE_KEYS = ['beginner','apprentice','achiever','explorer','professional','expert','master','elite','champion','legend'];
+const levelOf = xp => Math.min(50, Math.floor(Math.sqrt(xp / 50)) + 1);
+const xpForLevel = L => 50 * (L - 1) ** 2;
+const titleOf = L => T('titles.' + TITLE_KEYS[Math.min(9, Math.floor((L - 1) / 5))]);
+const doneCount = s => s.tasks.reduce((a, t) => a + (isRec(t) ? t.history.length : (t.status === 'completed' ? 1 : 0)), 0);
+function streakOf(s) {
+  const days = new Set();
+  s.tasks.forEach(t => { if (t.completedAt) days.add(ymd(new Date(t.completedAt))); (t.history || []).forEach(h => days.add(ymd(new Date(h.ts)))); });
+  const d = new Date();
+  if (!days.has(ymd(d))) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (days.has(ymd(d))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+const ACH = [
+  { id:'first', r:'common', t: s => doneCount(s) >= 1 },
+  { id:'ten', r:'rare', t: s => doneCount(s) >= 10 },
+  { id:'earn100', r:'common', t: s => s.lifetime >= 10000 },
+  { id:'earn1000', r:'rare', t: s => s.lifetime >= 100000 },
+  { id:'earn10000', r:'epic', t: s => s.lifetime >= 1000000 },
+  { id:'streak7', r:'epic', t: s => streakOf(s) >= 7 },
+  { id:'level10', r:'rare', t: s => levelOf(s.xp) >= 10 },
+  { id:'level50', r:'legendary', t: s => levelOf(s.xp) >= 50 },
+  { id:'saver', r:'rare', t: s => s.goals.some(g => g.status === 'completed') },
+  { id:'collector', r:'rare', t: s => s.cos.owned.length >= 6 },
+  { id:'focus', r:'rare', t: s => s.focus.length >= 5 },
+];
+function unlockAchievements(d) {
+  const got = [];
+  for (const a of ACH) if (!d.achievements.includes(a.id) && a.t(d)) { d.achievements.push(a.id); got.push(a.id); }
+  return got;
+}
+
+const ui = { tab:'dashboard', filter:'all', lang:'ar', theme:'dark', banner:'', q:'', sort:'due', range:7, rep:'week', cal:{ mode:'month', date:'' } };
+let S;
+
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => globalThis.crypto?.randomUUID?.() ?? (Date.now().toString(36) + Math.random().toString(36).slice(2));
+const T = k => k.split('.').reduce((o, p) => o?.[p], STR[ui.lang]) ?? k;
+const loc = () => (ui.lang === 'ar' ? 'ar-EG' : 'en-GB');
+const fmt = p => new Intl.NumberFormat(loc(), { style:'currency', currency:'EGP' }).format(p / 100);
+const fmtDate = ts => new Intl.DateTimeFormat(loc(), { dateStyle:'medium', timeStyle:'short' }).format(ts);
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => ymd(new Date());
+const startOfToday = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); };
+const mid = k => ((DIFF[k][0] + DIFF[k][1]) / 200).toFixed(2);
+const sign = a => (a > 0 ? '+' : '−') + fmt(Math.abs(a));
+
+// Parses a major-unit amount ("12.5", "١٢٫٥") into integer piastres. Returns null if invalid.
+function toP(v) {
+  const s = String(v ?? '').trim().replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace('٫', '.').replace(',', '.');
+  return /^\d+(\.\d{1,2})?$/.test(s) ? Math.round(Number(s) * 100) : null;
+}
+
+// ---------- Storage & invariants ----------
+const ls = () => { try { return window.localStorage; } catch { return null; } };
+const freshState = () => ({ v:1, balance:0, savings:0, lifetime:0, spending:0, xp:0, achievements:[], focus:[], profile:{ name:'', avatar:'' }, claims:[], cos:{ owned:['pal_gold','amb_none','fx_none','frame_none'], eq:{ palette:'pal_gold', title:'', ambient:'amb_none', fx:'fx_none', frame:'frame_none' } }, tasks:[], rewards:[], purchases:[], goals:[], ledger:[], used:{} });
+
+function invariants(s) {
+  const net = s.ledger.reduce((a, e) => a + e.amount, 0);
+  const saved = s.goals.reduce((a, g) => a + g.saved, 0);
+  const chain = s.ledger.every((e, i, a) => e.after === e.before + e.amount && e.before === (i + 1 < a.length ? a[i + 1].after : 0));
+  const goals = s.goals.every(g => g.saved >= 0 && g.saved <= g.target);
+  if (s.balance < 0 || s.savings < 0 || net !== s.balance || saved !== s.savings || !chain || !goals) throw new Error('invariant');
+}
+
+function loadState() {
+  let raw = null;
+  try { raw = ls()?.getItem(KEY) ?? null; } catch {}
+  if (!raw) return freshState();
+  try { const s = JSON.parse(raw); invariants(s); s.xp ??= 0; s.achievements ??= []; s.focus ??= []; s.cos ??= { owned:['pal_gold','amb_none','fx_none'], eq:{ palette:'pal_gold', title:'', ambient:'amb_none', fx:'fx_none' } }; s.cos.eq.fx ??= 'fx_none'; if (!s.cos.owned.includes('fx_none')) s.cos.owned.push('fx_none'); s.cos.eq.frame ??= 'frame_none'; if (!s.cos.owned.includes('frame_none')) s.cos.owned.push('frame_none'); s.profile ??= { name:'', avatar:'' }; s.claims ??= []; s.tasks.forEach(t => { t.xp ??= 0; t.freq ??= 'none'; t.history ??= []; }); return s; }
+  catch {
+    try { ls().setItem(KEY + '.backup.' + Date.now(), raw); } catch {}
+    ui.banner = 'err.corrupt';
+    return freshState();
+  }
+}
+
+function persist(s) { try { ls().setItem(KEY, JSON.stringify(s)); return true; } catch { return false; } }
+
+function loadPrefs() {
+  try {
+    const p = JSON.parse(ls()?.getItem(PREF) || '{}');
+    if (['ar', 'en'].includes(p.lang)) ui.lang = p.lang;
+    if (['dark', 'light'].includes(p.theme)) ui.theme = p.theme;
+  } catch {}
+}
+function savePrefs() { try { ls()?.setItem(PREF, JSON.stringify({ lang:ui.lang, theme:ui.theme })); } catch {} }
+
+// ---------- Transactions: every change runs on a draft, is checked, then persisted atomically ----------
+class AppErr extends Error {}
+const fail = code => { throw new AppErr(code); };
+const ISO = /^\d{4}-\d{2}-\d{2}$/;
+let note = '';
+
+function toast(msg, kind = 'ok', action = null) {
+  const el = $('#toast');
+  el.replaceChildren(document.createTextNode(msg + note));
+  note = '';
+  if (action) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tbtn'; b.textContent = action.label;
+    b.onclick = () => { const r = action.fn(); if (r) render(); el.className = ''; };
+    el.append(' ', b);
+  }
+  el.style.pointerEvents = action ? 'auto' : 'none';
+  el.className = 'show ' + kind;
+  clearTimeout(toast.h);
+  toast.h = setTimeout(() => { el.className = ''; }, action ? 6000 : 3200);
+}
+const ok = k => toast(T(k), 'ok');
+
+function post(d, type, amount, desc, ref) {
+  const before = d.balance, after = before + amount;
+  if (after < 0) fail('insufficient');
+  d.balance = after;
+  d.ledger.unshift({ id:uid(), ts:Date.now(), type, amount, before, after, desc, ref });
+}
+
+function run(fn) {
+  const draft = JSON.parse(JSON.stringify(S));
+  note = '';
+  try {
+    const out = fn(draft) ?? {};
+    const L0 = levelOf(S.xp), L1 = levelOf(draft.xp);
+    const got = unlockAchievements(draft);
+    invariants(draft);
+    if (!persist(draft)) fail('storage');
+    S = draft;
+    note = (L1 > L0 ? ` · ${T('levelUp')} ${L1}` : '') + got.map(id => ` · 🏆 ${T('ach.' + id + '.n')}`).join('');
+    return out;
+  } catch (e) {
+    if (!(e instanceof AppErr)) console.error(e);
+    toast(T('err.' + (e instanceof AppErr ? e.message : 'invalid')), 'err');
+    return null;
+  }
+}
+const done = (fn, msg) => { const r = run(fn); if (r && msg) ok(msg); return r; };
+
+// ---------- Tasks ----------
+const isRec = t => t.freq === 'daily' || t.freq === 'weekly';
+function parseTask(f) {
+  const title = (f.title || '').trim(), reward = toP(f.reward);
+  if (!title || title.length > 200 || reward === null || reward > 1000000 || !DIFF[f.difficulty]) fail('invalid');
+  if (f.due && !ISO.test(f.due)) fail('invalid');
+  const freq = ['none', 'daily', 'weekly'].includes(f.freq) ? f.freq : 'none';
+  return { title, reward, difficulty: f.difficulty, freq, due: f.due || (freq === 'none' ? '' : today()) };
+}
+const addTask = f => done(d => { d.tasks.unshift({ id: uid(), ...parseTask(f), status: 'pending', completedAt: null, xp: 0, history: [] }); }, 'added');
+const updateTask = (id, f) => done(d => {
+  const t = d.tasks.find(x => x.id === id);
+  if (!t) fail('notfound');
+  if (t.status === 'completed') fail('completedLocked');
+  Object.assign(t, parseTask(f));
+}, 'savedOk');
+function completeTask(id) {
+  const r = run(d => {
+    const t = d.tasks.find(x => x.id === id);
+    if (!t) fail('notfound');
+    const xp = XPD[t.difficulty];
+    if (isRec(t)) {
+      if (t.due > today()) fail('notDue');
+      const h = { id: uid(), date: t.due, ts: Date.now(), reward: t.reward, xp, prevDue: t.due };
+      if (t.history.some(x => x.date === h.date)) fail('already');
+      t.due = addDays(t.due < today() ? today() : t.due, t.freq === 'daily' ? 1 : 7);
+      t.history.unshift(h); d.xp += xp; d.lifetime += t.reward;
+      if (t.reward > 0) post(d, 'task_reward', t.reward, t.title, t.id);
+      return { hid: h.id };
+    }
+    if (t.status === 'completed') fail('already');
+    t.status = 'completed'; t.completedAt = Date.now(); t.xp = xp;
+    d.xp += xp; d.lifetime += t.reward;
+    if (t.reward > 0) post(d, 'task_reward', t.reward, t.title, t.id);
+    return {};
+  });
+  if (r) { celebrate(); toast(T('completedMsg'), 'ok', { label: T('undo'), fn: () => undoComplete(id, r.hid) }); }
+  return r;
+}
+function undoComplete(id, hid) {
+  const r = run(d => {
+    const t = d.tasks.find(x => x.id === id);
+    if (!t) fail('invalid');
+    if (isRec(t)) {
+      const h = t.history[0];
+      if (!h || h.id !== hid) fail('invalid');
+      if (h.reward > 0) post(d, 'reversal', -h.reward, t.title, t.id);
+      d.lifetime -= h.reward; d.xp -= h.xp; t.due = h.prevDue; t.history.shift();
+      return;
+    }
+    if (t.status !== 'completed') fail('invalid');
+    if (t.reward > 0) post(d, 'reversal', -t.reward, t.title, t.id);
+    d.lifetime -= t.reward; d.xp -= t.xp;
+    t.status = 'pending'; t.completedAt = null; t.xp = 0;
+  });
+  if (r) ok('undone');
+  return r;
+}
+const deleteTask = id => done(d => {
+  const i = d.tasks.findIndex(x => x.id === id);
+  if (i < 0) fail('notfound');
+  if (d.tasks[i].status === 'completed' || d.tasks[i].history.length) fail('pendingOnly');
+  d.tasks.splice(i, 1);
+}, 'deleted');
+const postponeTask = id => done(d => {
+  const t = d.tasks.find(x => x.id === id);
+  if (!t) fail('notfound');
+  if (t.status === 'completed') fail('completedLocked');
+  t.due = addDays(t.due && t.due > today() ? t.due : today(), 1);
+}, 'postponed');
+const duplicateTask = id => done(d => {
+  const t = d.tasks.find(x => x.id === id);
+  if (!t) fail('notfound');
+  d.tasks.unshift({ ...t, id: uid(), title: t.title.slice(0, 190) + T('copySuffix'), status: 'pending', completedAt: null, xp: 0, history: [] });
+}, 'duplicated');
+
+// ---------- Shop ----------
+const addReward = f => done(d => {
+  const name = (f.name || '').trim(), price = toP(f.price);
+  if (!name || name.length > 120 || !price || price > 10000000 || !CATS.includes(f.category)) fail('invalid');
+  d.rewards.unshift({ id:uid(), name, category:f.category, price, archived:false });
+}, 'added');
+const archiveReward = id => done(d => {
+  const r = d.rewards.find(x => x.id === id);
+  if (!r) fail('notfound');
+  r.archived = true;
+}, 'archived');
+function buy(rid, key) {
+  const r = run(d => {
+    if (d.used[key]) return { replayed:true };
+    const rw = d.rewards.find(x => x.id === rid && !x.archived);
+    if (!rw) fail('notfound');
+    post(d, 'shop_purchase', -rw.price, rw.name, rw.id);
+    d.spending += rw.price;
+    const p = { id:uid(), rewardId:rw.id, name:rw.name, price:rw.price, status:'purchased', ts:Date.now() };
+    d.purchases.unshift(p); d.used[key] = p.id;
+    return { purchase: p };
+  });
+  if (r && r.replayed) ok('dup');
+  else if (r) toast(T('bought'), 'ok', { label: T('undo'), fn: () => refund(r.purchase.id) });
+  return r;
+}
+function refund(pid) {
+  const r = run(d => {
+    const p = d.purchases.find(x => x.id === pid);
+    if (!p || p.status !== 'purchased') fail('invalid');
+    post(d, 'refund', p.price, p.name, p.id);
+    d.spending -= p.price; p.status = 'refunded';
+  });
+  if (r) ok('refunded');
+  return r;
+}
+function redeem(pid) {
+  const r = run(d => {
+    const p = d.purchases.find(x => x.id === pid);
+    if (!p) fail('notfound');
+    if (p.status === 'redeemed') return { already: true };
+    if (p.status !== 'purchased') fail('invalid');
+    p.status = 'redeemed'; p.redeemedAt = Date.now();
+  });
+  if (r && !r.already) ok('redeemed');
+  return r;
+}
+
+// ---------- Savings ----------
+function addGoal(f) {
+  return done(d => {
+    const name = (f.name || '').trim(), target = toP(f.target);
+    if (!name || name.length > 120 || !target || target > 10000000) fail('invalid');
+    if (f.date && !/^\d{4}-\d{2}-\d{2}$/.test(f.date)) fail('invalid');
+    d.goals.unshift({ id:uid(), name, target, saved:0, date:f.date || '', status:'active' });
+  }, 'goalAdded');
+}
+
+function deposit(gid, amount, key) {
+  const r = run(d => {
+    if (d.used[key]) return { replayed:true };
+    const g = d.goals.find(x => x.id === gid);
+    if (!g) fail('notfound');
+    if (g.status !== 'active') fail('notActive');
+    if (!amount || amount <= 0) fail('invalid');
+    if (amount > g.target - g.saved) fail('exceeds');
+    post(d, 'savings_deposit', -amount, g.name, g.id);
+    g.saved += amount; d.savings += amount; d.used[key] = g.id;
+    if (g.saved === g.target) g.status = 'completed';
+    return { completed: g.status === 'completed' };
+  });
+  if (r) ok(r.replayed ? 'dup' : r.completed ? 'goalDone' : 'depOk');
+  return r;
+}
+
+function withdraw(gid, amount, key) {
+  const r = run(d => {
+    if (d.used[key]) return { replayed:true };
+    const g = d.goals.find(x => x.id === gid);
+    if (!g) fail('notfound');
+    if (!amount || amount <= 0) fail('invalid');
+    if (amount > g.saved || amount > d.savings) fail('savedLow');
+    post(d, 'savings_withdrawal', amount, g.name, g.id);
+    g.saved -= amount; d.savings -= amount; d.used[key] = g.id;
+    if (g.status === 'completed') g.status = 'active';
+  });
+  if (r) ok(r.replayed ? 'dup' : 'wdOk');
+  return r;
+}
+
+// ---------- Cosmetics store: app-skin items bought with EGP, gated by level or achievement ----------
+const STR_Y = {
+ar:{cos:{pal_gold:'الذهبي الملكي',pal_emerald:'الزمرد',pal_sapphire:'الياقوت الأزرق',pal_ruby:'الروبي',pal_amethyst:'الجمشت',
+  t_disciplined:'لقب: المنضبط',t_architect:'لقب: صانع الإنجازات',t_saver:'لقب: سيّد الادخار',t_unstoppable:'لقب: لا يتوقف',t_legend:'لقب: الأسطورة الحيّة',
+  amb_none:'بدون خلفية خاصة',amb_aurora:'خلفية الشفق',amb_stars:'خلفية النجوم'},
+  kind:{palette:'ألوان التطبيق',title:'ألقاب',ambient:'خلفيات'},
+  equip:'تفعيل', unequip:'إزالة', active:'مُفعّل', equipMsg:'تم تحديث المظهر', needLevel:'يتطلب المستوى', needAch:'يتطلب إنجازاً',
+  cosHeading:'متجر التخصيص', ach:{collector:{n:'جامع الأناقة',d:'امتلك 3 عناصر تخصيص مشتراة'}},
+  err:{alreadyOwned:'تملك هذا العنصر بالفعل', locked:'هذا العنصر غير متاح بعد لمستواك أو إنجازاتك', notOwned:'يجب شراء العنصر أولاً'}},
+en:{cos:{pal_gold:'Royal Gold',pal_emerald:'Emerald',pal_sapphire:'Sapphire',pal_ruby:'Ruby',pal_amethyst:'Amethyst',
+  t_disciplined:'Title: The Disciplined',t_architect:'Title: Architect of Wins',t_saver:'Title: Lord of Savings',t_unstoppable:'Title: Unstoppable',t_legend:'Title: Living Legend',
+  amb_none:'No ambient effect',amb_aurora:'Aurora backdrop',amb_stars:'Starfield backdrop'},
+  kind:{palette:'App colours',title:'Titles',ambient:'Backdrops'},
+  equip:'Equip', unequip:'Remove', active:'Active', equipMsg:'Appearance updated', needLevel:'Requires level', needAch:'Requires achievement',
+  cosHeading:'Customization store', ach:{collector:{n:'Collector',d:'Own 3 purchased customization items'}},
+  err:{alreadyOwned:'You already own this item', locked:'This item is not unlocked for your level or achievements yet', notOwned:'Buy this item first'}}
+};
+for (const l of ['ar','en']) { const { err, ach, ...rest } = STR_Y[l]; Object.assign(STR[l], rest); Object.assign(STR[l].err, err); Object.assign(STR[l].ach, ach); }
+
+const STR_Z = {
+ar:{ cos:{pal_obsidian:'الفضي الفحمي',pal_jade:'اليشم',pal_coral:'المرجان',t_night:'لقب: صائد الليل',t_focus:'لقب: حارس التركيز',t_marathon:'لقب: الماراثوني',
+    amb_grid:'خلفية الشبكة',amb_ember:'خلفية الجمر',fx_none:'بدون تأثير',fx_confetti:'تأثير الكونفيتي',fx_sparks:'تأثير الشرر'},
+  kind:{fx:'تأثيرات الإكمال'}, nav:{focus:'التركيز'}, ach:{focus:{n:'مركّز',d:'أكمل 5 جلسات تركيز'}},
+  freq:{none:'مرة واحدة',daily:'يومياً',weekly:'أسبوعياً'}, repeat:'التكرار', times:'مرة', minutes:'دقيقة', linkTask:'ربط بمهمة', noTask:'بدون مهمة',
+  start:'ابدأ', pause:'إيقاف مؤقت', reset:'إعادة ضبط', duration:'مدة الجلسة', todayFocus:'تركيز اليوم', sessions:'آخر الجلسات',
+  focusDone:'جلسة تركيز مكتملة · +15 XP', focusHeading:'وضع التركيز', focusHint:'اختر المدة، واربط الجلسة بمهمة إن أردت',
+  err:{notDue:'لم يحن موعد هذا التكرار بعد'} },
+en:{ cos:{pal_obsidian:'Obsidian Silver',pal_jade:'Jade',pal_coral:'Coral',t_night:'Title: Night Owl',t_focus:'Title: Focus Keeper',t_marathon:'Title: Marathoner',
+    amb_grid:'Grid backdrop',amb_ember:'Ember backdrop',fx_none:'No effect',fx_confetti:'Confetti effect',fx_sparks:'Sparks effect'},
+  kind:{fx:'Completion effects'}, nav:{focus:'Focus'}, ach:{focus:{n:'Deep worker',d:'Complete 5 focus sessions'}},
+  freq:{none:'Once',daily:'Daily',weekly:'Weekly'}, repeat:'Repeat', times:'times', minutes:'min', linkTask:'Link to task', noTask:'No task',
+  start:'Start', pause:'Pause', reset:'Reset', duration:'Session length', todayFocus:'Focus today', sessions:'Recent sessions',
+  focusDone:'Focus session complete · +15 XP', focusHeading:'Focus mode', focusHint:'Pick a length, and link the session to a task if you like',
+  err:{notDue:'This occurrence is not due yet'} }
+};
+for (const l of ['ar','en']) { const { cos, kind, nav, ach, err, ...rest } = STR_Z[l]; Object.assign(STR[l], rest); Object.assign(STR[l].cos, cos); Object.assign(STR[l].kind, kind); Object.assign(STR[l].nav, nav); Object.assign(STR[l].ach, ach); Object.assign(STR[l].err, err); }
+const addDays = (iso, n) => { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return ymd(d); };
+
+const STR_W = {
+ar:{ nav:{calendar:'التقويم',analytics:'التحليلات',profile:'ملفي'}, ltype:{challenge_reward:'مكافأة تحدٍّ'},
+  cal:{day:'يوم',week:'أسبوع',month:'شهر',today:'اليوم',prev:'السابق',next:'التالي',noEvents:'لا أحداث في هذا اليوم',done:'منجزة',due:'مستحقة',late:'متأخرة',focus:'تركيز'},
+  mis:{d_tasks3:'أكمل 3 مهام اليوم',d_earn50:'اكسب 50 ج.م اليوم',d_focus25:'ركّز 25 دقيقة اليوم',w_tasks15:'أكمل 15 مهمة هذا الأسبوع',w_focus180:'ركّز 3 ساعات هذا الأسبوع',w_earn500:'اكسب 500 ج.م هذا الأسبوع',m_tasks60:'أكمل 60 مهمة هذا الشهر',m_focus600:'ركّز 10 ساعات هذا الشهر'},
+  period:{day:'يومية',week:'أسبوعية',month:'شهرية'},
+  missionsHeading:'المهام والتحديات', claim:'استلام', claimed:'تم الاستلام', notReady:'لم تكتمل بعد', claimedMsg:'تم استلام المكافأة',
+  range:{1:'اليوم',7:'7 أيام',30:'30 يوماً',90:'90 يوماً'},
+  earnedRange:'أرباح الفترة', spentRange:'إنفاق الفترة', savedRange:'صافي الادخار', focusRange:'دقائق التركيز', doneRange:'مهام منجزة',
+  trend:'اتجاه الأرباح', byDiff:'الأرباح حسب الصعوبة', bySpend:'الإنفاق حسب الفئة', spend:{cosmetic:'تخصيص التطبيق',savings:'الادخار',other:'أخرى'}, noData:'لا توجد بيانات في هذه الفترة',
+  displayName:'اسم الحساب', guest:'ضيف', changeAvatar:'تغيير الصورة', removeAvatar:'حذف الصورة', framesHint:'الإطارات المتحركة تُشترى من المتجر وتُفعَّل من هنا',
+  installHint:'لتثبيت التطبيق والعمل دون اتصال، افتحه من خادم https وثبّته من قائمة المتصفح.',
+  reports:'التقارير', week:'أسبوعي', month:'شهري', vsPrev:'مقارنة بالفترة السابقة',
+  rep:{done:'مهام منجزة',earned:'الأرباح',spent:'الإنفاق',saved:'صافي الادخار',focus:'دقائق التركيز',missions:'تحديات مستلمة'},
+  notifOn:'الإشعارات مفعّلة', enableNotif:'تفعيل إشعارات المتصفح', notifDenied:'الإشعارات مرفوضة من إعدادات المتصفح', notifUnsupported:'المتصفح لا يدعم الإشعارات',
+  notifDue:'مهمة مستحقة اليوم', notifMission:'مكافأة تحدٍّ جاهزة للاستلام', dueToday:'لديك مهام مستحقة اليوم:',
+  cos:{frame_none:'بدون إطار',frame_gold:'إطار ذهبي دوّار',frame_flame:'إطار ناري نابض',frame_crystal:'إطار بلوري متلألئ'},
+  kind:{frame:'الإطارات'},
+  err:{badImage:'الصورة غير صالحة أو أكبر من 5 ميغابايت', nameInvalid:'الاسم طويل جداً', notReady:'لم تكتمل المهمة بعد'} },
+en:{ nav:{calendar:'Calendar',analytics:'Analytics',profile:'Profile'}, ltype:{challenge_reward:'Challenge reward'},
+  cal:{day:'Day',week:'Week',month:'Month',today:'Today',prev:'Prev',next:'Next',noEvents:'Nothing scheduled this day',done:'Done',due:'Due',late:'Late',focus:'Focus'},
+  mis:{d_tasks3:'Complete 3 tasks today',d_earn50:'Earn 50 EGP today',d_focus25:'Focus 25 minutes today',w_tasks15:'Complete 15 tasks this week',w_focus180:'Focus 3 hours this week',w_earn500:'Earn 500 EGP this week',m_tasks60:'Complete 60 tasks this month',m_focus600:'Focus 10 hours this month'},
+  period:{day:'Daily',week:'Weekly',month:'Monthly'},
+  missionsHeading:'Missions & challenges', claim:'Claim', claimed:'Claimed', notReady:'Not finished yet', claimedMsg:'Reward claimed',
+  range:{1:'Today',7:'7 days',30:'30 days',90:'90 days'},
+  earnedRange:'Earned in range', spentRange:'Spent in range', savedRange:'Net savings', focusRange:'Focus minutes', doneRange:'Tasks done',
+  trend:'Earnings trend', byDiff:'Earnings by difficulty', bySpend:'Spending by category', spend:{cosmetic:'App customization',savings:'Savings',other:'Other'}, noData:'No data in this range',
+  displayName:'Account name', guest:'Guest', changeAvatar:'Change photo', removeAvatar:'Remove photo', framesHint:'Animated frames are bought in the store and equipped here',
+  installHint:'To install the app and use it offline, open it from an https server and install it from the browser menu.',
+  reports:'Reports', week:'Weekly', month:'Monthly', vsPrev:'Compared with the previous period',
+  rep:{done:'Tasks done',earned:'Earned',spent:'Spent',saved:'Net savings',focus:'Focus minutes',missions:'Challenges claimed'},
+  notifOn:'Notifications on', enableNotif:'Enable browser notifications', notifDenied:'Notifications are blocked in browser settings', notifUnsupported:'This browser does not support notifications',
+  notifDue:'Task due today', notifMission:'Challenge reward ready', dueToday:'Tasks due today:',
+  cos:{frame_none:'No frame',frame_gold:'Rotating gold frame',frame_flame:'Pulsing flame frame',frame_crystal:'Shimmering crystal frame'},
+  kind:{frame:'Frames'},
+  err:{badImage:'Invalid image or larger than 5 MB', nameInvalid:'Name is too long', notReady:'This mission is not finished yet'} }
+};
+for (const l of ['ar','en']) {
+  const { nav, ltype, cal, mis, period, cos, kind, err, ...rest } = STR_W[l];
+  Object.assign(STR[l], rest, { cal, mis, period });
+  Object.assign(STR[l].nav, nav); Object.assign(STR[l].ltype, ltype);
+  Object.assign(STR[l].cos, cos); Object.assign(STR[l].kind, kind); Object.assign(STR[l].err, err);
+}
+
+const COS = [
+  { id:'pal_gold', kind:'palette', price:0, colors:['#d4af37','#f6e27a'], req:null },
+  { id:'pal_emerald', kind:'palette', price:4000, colors:['#2fbf71','#a7f3d0'], req:{ level:5 } },
+  { id:'pal_sapphire', kind:'palette', price:6000, colors:['#3b82f6','#bfdbfe'], req:{ level:10 } },
+  { id:'pal_ruby', kind:'palette', price:8000, colors:['#e11d48','#fecdd3'], req:{ ach:'earn1000' } },
+  { id:'pal_amethyst', kind:'palette', price:12000, colors:['#a855f7','#e9d5ff'], req:{ level:20 } },
+  { id:'t_disciplined', kind:'title', price:1500, req:{ level:3 } },
+  { id:'t_architect', kind:'title', price:3000, req:{ ach:'ten' } },
+  { id:'t_saver', kind:'title', price:3000, req:{ ach:'saver' } },
+  { id:'t_unstoppable', kind:'title', price:5000, req:{ ach:'streak7' } },
+  { id:'t_legend', kind:'title', price:20000, req:{ level:40 } },
+  { id:'amb_none', kind:'ambient', price:0, req:null },
+  { id:'amb_aurora', kind:'ambient', price:2500, req:{ level:8 } },
+  { id:'amb_stars', kind:'ambient', price:3500, req:{ level:15 } },
+  { id:'pal_obsidian', kind:'palette', price:5000, colors:['#cbd5e1','#f1f5f9'], req:{ level:12 } },
+  { id:'pal_jade', kind:'palette', price:7000, colors:['#14b8a6','#99f6e4'], req:{ level:15 } },
+  { id:'pal_coral', kind:'palette', price:9000, colors:['#fb7185','#fecdd3'], req:{ ach:'ten' } },
+  { id:'t_night', kind:'title', price:2000, req:{ level:6 } },
+  { id:'t_focus', kind:'title', price:2500, req:{ ach:'focus' } },
+  { id:'t_marathon', kind:'title', price:4000, req:{ level:25 } },
+  { id:'amb_grid', kind:'ambient', price:2000, req:{ level:6 } },
+  { id:'amb_ember', kind:'ambient', price:3000, req:{ level:12 } },
+  { id:'fx_none', kind:'fx', price:0, req:null },
+  { id:'fx_confetti', kind:'fx', price:1800, req:{ level:4 } },
+  { id:'fx_sparks', kind:'fx', price:2800, req:{ ach:'ten' } },
+  { id:'frame_none', kind:'frame', price:0, req:null },
+  { id:'frame_gold', kind:'frame', price:1500, req:{ level:2 } },
+  { id:'frame_flame', kind:'frame', price:3500, req:{ level:9 } },
+  { id:'frame_crystal', kind:'frame', price:6000, req:{ level:18 } },
+];
+const DEFAULT_EQ = { palette:'pal_gold', title:'', ambient:'amb_none', fx:'fx_none', frame:'frame_none' };
+const cosById = id => COS.find(x => x.id === id);
+const reqMet = (it, s) => !it.req || (it.req.level ? levelOf(s.xp) >= it.req.level : s.achievements.includes(it.req.ach));
+const reqText = it => (it.req.level ? `${T('needLevel')} ${it.req.level}` : `${T('needAch')}: ${T('ach.' + it.req.ach + '.n')}`);
+
+function buyCosmetic(id, key) {
+  const r = run(d => {
+    if (d.used[key]) return { replayed: true };
+    const it = cosById(id);
+    if (!it) fail('notfound');
+    if (d.cos.owned.includes(id)) fail('alreadyOwned');
+    if (!reqMet(it, d)) fail('locked');
+    post(d, 'shop_purchase', -it.price, T('cos.' + id), id);
+    d.spending += it.price; d.cos.owned.push(id); d.used[key] = id;
+    return { item: it };
+  });
+  if (r && r.replayed) ok('dup');
+  else if (r) toast(T('bought'), 'ok', { label: T('undo'), fn: () => refundCos(r.item.id) });
+  return r;
+}
+function refundCos(id) {
+  const r = run(d => {
+    const it = cosById(id);
+    if (!it || it.price === 0 || !d.cos.owned.includes(id)) fail('invalid');
+    post(d, 'refund', it.price, T('cos.' + id), id);
+    d.spending -= it.price;
+    d.cos.owned = d.cos.owned.filter(x => x !== id);
+    for (const k of Object.keys(DEFAULT_EQ)) if (d.cos.eq[k] === id) d.cos.eq[k] = DEFAULT_EQ[k];
+  });
+  if (r) ok('refunded');
+  return r;
+}
+function equipCos(id) {
+  return done(d => {
+    const it = cosById(id);
+    if (!it) fail('notfound');
+    if (!d.cos.owned.includes(id)) fail('notOwned');
+    if (it.kind === 'title') d.cos.eq.title = d.cos.eq.title === id ? '' : id;
+    else d.cos.eq[it.kind] = id;
+  }, 'equipMsg');
+}
+function applyCos() {
+  const pal = cosById(S.cos.eq.palette) || cosById('pal_gold'), root = document.documentElement.style;
+  root.setProperty('--gold', pal.colors[0]); root.setProperty('--gold2', pal.colors[1]);
+  document.body.dataset.amb = S.cos.eq.ambient;
+  const t = cosById(S.cos.eq.title);
+  $('#ctitle').textContent = t ? T('cos.' + t.id) : '';
+}
+function cosSection() {
+  const cards = COS.map(it => {
+    const owned = S.cos.owned.includes(it.id), on = S.cos.eq[it.kind] === it.id;
+    let action;
+    if (owned && it.kind === 'title') action = `<button type="button" data-act="coseq" data-id="${it.id}">${on ? T('unequip') : T('equip')}</button>`;
+    else if (owned) action = on ? `<span class="tag pos">✓ ${T('active')}</span>` : `<button type="button" data-act="coseq" data-id="${it.id}">${T('equip')}</button>`;
+    else if (reqMet(it, S)) action = `<button class="primary" type="button" data-act="cosbuy" data-id="${it.id}">${fmt(it.price)} · ${T('buy')}</button>`;
+    else action = `<span class="muted">🔒 ${reqText(it)}</span>`;
+    const sw = it.kind === 'palette' ? `<i class="sw" style="background:linear-gradient(135deg,${it.colors[0]},${it.colors[1]})"></i>` : '';
+    return `<section class="card cos">${sw}<b>${esc(T('cos.' + it.id))}</b><div class="muted">${T('kind.' + it.kind)}</div><div class="actions" style="margin-top:10px">${action}</div></section>`;
+  }).join('');
+  return `<h3 style="margin:18px 0 0">${T('cosHeading')}</h3><section class="grid" style="margin-top:10px">${cards}</section>`;
+}
+
+// ---------- Focus mode: timer survives tab switches; sessions are recorded and rewarded ----------
+const FOCUS = { len: 25, left: 25 * 60, endAt: 0, timer: null, tid: '' };
+const fmtClock = sec => `${pad(Math.floor(sec / 60))}:${pad(sec % 60)}`;
+const leftNow = () => (FOCUS.timer ? Math.max(0, Math.round((FOCUS.endAt - Date.now()) / 1000)) : FOCUS.left);
+const taskTitle = id => (S.tasks.find(t => t.id === id) || {}).title || '';
+function focusStart() {
+  if (FOCUS.timer) return;
+  FOCUS.endAt = Date.now() + FOCUS.left * 1000;
+  FOCUS.timer = setInterval(focusTick, 500);
+}
+function focusPause() { if (!FOCUS.timer) return; clearInterval(FOCUS.timer); FOCUS.timer = null; FOCUS.left = leftNow(); }
+function focusReset() { focusPause(); FOCUS.left = FOCUS.len * 60; }
+function focusTick() {
+  if (leftNow() <= 0) { focusFinish(); return; }
+  const el = $('#ftime');
+  if (el) el.textContent = fmtClock(leftNow());
+}
+function focusFinish() {
+  clearInterval(FOCUS.timer); FOCUS.timer = null; FOCUS.left = FOCUS.len * 60;
+  const minutes = FOCUS.len, tid = FOCUS.tid;
+  const r = run(d => { d.focus.unshift({ id: uid(), ts: Date.now(), min: minutes, tid }); d.xp += 15; });
+  beep();
+  if (r) ok('focusDone');
+  render();
+}
+function beep() {
+  try {
+    const C = window.AudioContext || window.webkitAudioContext, c = new C(), o = c.createOscillator(), g = c.createGain();
+    o.frequency.value = 880; g.gain.value = 0.06; o.connect(g); g.connect(c.destination);
+    o.start(); o.stop(c.currentTime + 0.35);
+  } catch {}
+}
+function celebrate() {
+  const kind = S.cos.eq.fx, layer = $('#fx');
+  if (!kind || kind === 'fx_none' || !layer) return;
+  const cols = (cosById(S.cos.eq.palette) || cosById('pal_gold')).colors;
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('i');
+    p.className = 'p ' + (kind === 'fx_sparks' ? 'spark' : 'conf');
+    p.style.left = (kind === 'fx_sparks' ? 50 : Math.random() * 100) + '%';
+    p.style.background = cols[i % 2];
+    p.style.animationDelay = (Math.random() * 0.3) + 's';
+    p.style.setProperty('--dx', (Math.random() * 180 - 90) + 'px');
+    layer.append(p);
+  }
+  setTimeout(() => layer.replaceChildren(), 2000);
+}
+
+// ---------- Missions, calendar, analytics, profile, reminders ----------
+const MISSIONS = [
+  { id:'d_tasks3', period:'day', metric:'tasks', target:3, reward:3000, xp:30 },
+  { id:'d_earn50', period:'day', metric:'earned', target:5000, reward:1000, xp:20 },
+  { id:'d_focus25', period:'day', metric:'focus', target:25, reward:800, xp:25 },
+  { id:'w_tasks15', period:'week', metric:'tasks', target:15, reward:15000, xp:120 },
+  { id:'w_focus180', period:'week', metric:'focus', target:180, reward:8000, xp:100 },
+  { id:'w_earn500', period:'week', metric:'earned', target:50000, reward:12000, xp:150 },
+  { id:'m_tasks60', period:'month', metric:'tasks', target:60, reward:60000, xp:400 },
+  { id:'m_focus600', period:'month', metric:'focus', target:600, reward:40000, xp:300 },
+];
+const dayDiff = (a, b) => Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 864e5);
+const fmtShort = s => new Intl.DateTimeFormat(loc(), { day: 'numeric', month: 'short' }).format(new Date(s + 'T00:00:00'));
+const WEEK_OFF = d => (new Date(d + 'T00:00:00').getDay() + 1) % 7;          // weeks start on Saturday
+
+function bounds(period, off = 0) {
+  const start = new Date(); start.setHours(0, 0, 0, 0);
+  if (period === 'day') start.setDate(start.getDate() + off);
+  else if (period === 'week') start.setDate(start.getDate() - ((start.getDay() + 1) % 7) + off * 7);
+  else { start.setDate(1); start.setMonth(start.getMonth() + off); }
+  const end = new Date(start);
+  if (period === 'day') end.setDate(end.getDate() + 1);
+  else if (period === 'week') end.setDate(end.getDate() + 7);
+  else end.setMonth(end.getMonth() + 1);
+  return { a: start.getTime(), b: end.getTime(), key: ymd(start) };
+}
+function rangeBounds(R) {
+  const end = new Date(); end.setHours(0, 0, 0, 0); end.setDate(end.getDate() + 1);
+  const start = new Date(end); start.setDate(start.getDate() - R);
+  return { a: start.getTime(), b: end.getTime() };
+}
+const completionTimes = s => s.tasks.reduce((out, t) => { if (t.completedAt) out.push(t.completedAt); (t.history || []).forEach(h => out.push(h.ts)); return out; }, []);
+function metric(s, m, a, b) {
+  if (m === 'tasks') return completionTimes(s).filter(x => x >= a && x < b).length;
+  if (m === 'earned') return s.ledger.filter(e => (e.type === 'task_reward' || e.type === 'reversal') && e.ts >= a && e.ts < b).reduce((x, e) => x + e.amount, 0);
+  return s.focus.filter(f => f.ts >= a && f.ts < b).reduce((x, f) => x + f.min, 0);
+}
+
+// Missions are claimed explicitly; each reward is granted once per period.
+const missionKey = (m, key) => m.id + '@' + key;
+function missionState(s, m) {
+  const p = bounds(m.period), claimed = s.claims.includes(missionKey(m, p.key)), prog = metric(s, m.metric, p.a, p.b);
+  return { progress: Math.max(0, Math.min(prog, m.target)), ready: prog >= m.target && !claimed, claimed };
+}
+function claimMission(id) {
+  const m = MISSIONS.find(x => x.id === id), p = bounds(m.period), ck = missionKey(m, p.key);
+  return done(d => {
+    if (d.claims.includes(ck)) fail('already');
+    if (metric(d, m.metric, p.a, p.b) < m.target) fail('notReady');
+    post(d, 'challenge_reward', m.reward, T('mis.' + id), ck);
+    d.lifetime += m.reward; d.xp += m.xp; d.claims.push(ck);
+  }, 'claimedMsg');
+}
+function missionsCard() {
+  const rows = MISSIONS.map(m => {
+    const ms = missionState(S, m), pct = Math.round(ms.progress / m.target * 100);
+    const val = m.metric === 'earned' ? `${fmt(ms.progress)} / ${fmt(m.target)}` : `${ms.progress} / ${m.target}`;
+    const act = ms.claimed ? `<span class="tag pos">✓ ${T('claimed')}</span>`
+      : ms.ready ? `<button class="primary" type="button" data-act="claim" data-id="${m.id}">${T('claim')} · ${fmt(m.reward)}</button>`
+      : `<span class="muted">${T('notReady')}</span>`;
+    return `<div class="row"><div style="flex:1 1 240px"><b>${T('mis.' + m.id)}</b> <span class="tag">${T('period.' + m.period)}</span><div class="bar"><i style="width:${pct}%"></i></div><div class="muted">${val}</div></div><div class="actions">${act}</div></div>`;
+  }).join('');
+  return `<section class="card"><h3>${T('missionsHeading')}</h3>${rows}</section>`;
+}
+
+// ---------- Reports & analytics (all derived from the ledger, tasks, and focus records) ----------
+function reportOf(a, b) {
+  const L = S.ledger.filter(e => e.ts >= a && e.ts < b);
+  const net = types => -L.filter(e => types.includes(e.type)).reduce((x, e) => x + e.amount, 0);
+  return {
+    done: metric(S, 'tasks', a, b), earned: metric(S, 'earned', a, b), spent: net(['shop_purchase', 'refund']),
+    saved: net(['savings_deposit', 'savings_withdrawal']), focus: metric(S, 'focus', a, b),
+    missions: L.filter(e => e.type === 'challenge_reward').length,
+  };
+}
+function analyticsData(R) {
+  const { a, b } = rangeBounds(R);
+  const L = S.ledger.filter(e => e.ts >= a && e.ts < b);
+  const diffOf = Object.fromEntries(S.tasks.map(t => [t.id, t.difficulty]));
+  const catOfReward = Object.fromEntries(S.rewards.map(r => [r.id, r.category]));
+  const rewardOfPurchase = Object.fromEntries(S.purchases.map(p => [p.id, p.rewardId]));
+  const byDiff = {}, bySpend = {};
+  L.forEach(e => {
+    if (e.type === 'task_reward' || e.type === 'reversal') { const k = diffOf[e.ref] || 'other'; byDiff[k] = (byDiff[k] || 0) + e.amount; }
+    if (e.type === 'shop_purchase' || e.type === 'refund') {
+      const rid = e.type === 'refund' ? rewardOfPurchase[e.ref] : e.ref;
+      const k = catOfReward[rid] || (cosById(e.ref) ? 'cosmetic' : 'other');
+      bySpend[k] = (bySpend[k] || 0) - e.amount;
+    }
+  });
+  const rowsOf = (obj, lbl) => Object.entries(obj).filter(([, v]) => v > 0).map(([k, v]) => ({ label: lbl(k), value: v })).sort((x, y) => y.value - x.value);
+  const diffLbl = k => (DIFF[k] ? T(k) : T('spend.other'));
+  const spendLbl = k => (CATS.includes(k) ? T('cats.' + k) : T('spend.' + k));
+  const buckets = R === 1
+    ? Array.from({ length: 24 }, (_, i) => ({ lo: a + i * 36e5, hi: a + (i + 1) * 36e5, label: `${i}:00` }))
+    : Array.from({ length: R }, (_, i) => ({ lo: a + i * 864e5, hi: a + (i + 1) * 864e5, label: fmtShort(ymd(new Date(a + i * 864e5))) }));
+  const trend = buckets.map(x => S.ledger.filter(e => (e.type === 'task_reward' || e.type === 'reversal') && e.ts >= x.lo && e.ts < x.hi).reduce((s, e) => s + e.amount, 0));
+  return { ...reportOf(a, b), byDiff: rowsOf(byDiff, diffLbl), bySpend: rowsOf(bySpend, spendLbl), trendLabels: buckets.map(x => x.label), trend };
+}
+function barChart(labels, vals) {
+  const n = vals.length, W = 640, H = 170, max = Math.max(1, ...vals), slot = W / n, bw = Math.max(2, slot - 3), step = n > 14 ? Math.ceil(n / 10) : 1;
+  const bars = vals.map((v, i) => {
+    const h = Math.max(0, Math.round(v / max * (H - 30))), x = i * slot + (slot - bw) / 2;
+    return `<rect x="${x}" y="${H - 18 - h}" width="${bw}" height="${h}" rx="3" fill="url(#eg)"><title>${esc(labels[i])}: ${fmt(v)}</title></rect>`
+      + (i % step === 0 ? `<text x="${x + bw / 2}" y="${H - 4}" text-anchor="middle" font-size="10" fill="currentColor" opacity=".7">${esc(labels[i])}</text>` : '');
+  }).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${T('trend')}" style="color:var(--muted)"><defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gold2)"/><stop offset="1" style="stop-color:var(--gold)"/></linearGradient></defs>${bars}</svg>`;
+}
+function hbars(rows) {
+  if (!rows.length) return `<p class="muted">${T('noData')}</p>`;
+  const max = Math.max(1, ...rows.map(r => r.value));
+  return rows.map(r => `<div class="hb"><span>${esc(r.label)}</span><div class="bar"><i style="width:${Math.round(r.value / max * 100)}%"></i></div><b>${fmt(r.value)}</b></div>`).join('');
+}
+
+// ---------- Calendar: day / week / month, from tasks, recurring schedules, and focus sessions ----------
+function calEvents(from, to) {
+  const map = {}, add = (d, e) => { if (d >= from && d <= to) (map[d] ||= []).push(e); };
+  const td = today();
+  S.tasks.forEach(t => {
+    if (isRec(t)) {
+      t.history.forEach(h => add(h.date, { k: 'done', t: t.title }));
+      if (t.status === 'pending' && t.due) {
+        const step = t.freq === 'daily' ? 1 : 7;
+        let d = t.due;
+        if (d < from) d = addDays(d, Math.ceil(dayDiff(d, from) / step) * step);
+        for (let n = 0; d <= to && n < 400; n++, d = addDays(d, step)) add(d, { k: d < td ? 'late' : 'due', t: t.title });
+      }
+    } else if (t.status === 'completed' && t.completedAt) add(ymd(new Date(t.completedAt)), { k: 'done', t: t.title });
+    else if (t.status === 'pending' && t.due) add(t.due, { k: t.due < td ? 'late' : 'due', t: t.title });
+  });
+  S.focus.forEach(f => add(ymd(new Date(f.ts)), { k: 'focus', t: `${f.min} ${T('minutes')}` }));
+  return map;
+}
+function calRange() {
+  const m = ui.cal.mode, d = ui.cal.date;
+  if (m === 'day') return [d, d];
+  if (m === 'week') { const s = addDays(d, -WEEK_OFF(d)); return [s, addDays(s, 6)]; }
+  const first = d.slice(0, 8) + '01', s = addDays(first, -WEEK_OFF(first));
+  return [s, addDays(s, 41)];
+}
+function shiftCal(d, mode, dir) {
+  if (mode === 'day') return addDays(d, dir);
+  if (mode === 'week') return addDays(d, 7 * dir);
+  const x = new Date(d + 'T00:00:00'); x.setDate(1); x.setMonth(x.getMonth() + dir); return ymd(x);
+}
+
+// ---------- Profile & avatar ----------
+function avatarHTML(size = 96) {
+  const fr = S.cos.eq.frame && S.cos.eq.frame !== 'frame_none' ? S.cos.eq.frame.replace('frame_', 'f-') : '';
+  const initial = esc((S.profile.name || '?').trim().charAt(0).toUpperCase());
+  const inner = S.profile.avatar ? `<img src="${esc(S.profile.avatar)}" alt="">` : initial;
+  return `<div class="frame ${fr}" style="width:${size}px;height:${size}px"><div class="avatar" style="width:100%;height:100%;font-size:${Math.round(size * .38)}px">${inner}</div></div>`;
+}
+function saveProfile(f) {
+  return done(d => {
+    const name = (f.name || '').trim();
+    if (name.length > 40) fail('nameInvalid');
+    d.profile.name = name;
+  }, 'savedOk');
+}
+function saveAvatar(url) {
+  const r = done(d => {
+    if (!/^data:image\/(jpeg|png|webp);base64,/.test(url) || url.length > 300000) fail('badImage');
+    d.profile.avatar = url;
+  }, 'savedOk');
+  if (r) render();
+  return r;
+}
+function removeAvatar() {
+  const r = done(d => { d.profile.avatar = ''; }, 'savedOk');
+  if (r) render();
+  return r;
+}
+function pickAvatar(file) {
+  if (!file || !/^image\//.test(file.type) || file.size > 5e6) { toast(T('err.badImage'), 'err'); return; }
+  const url = URL.createObjectURL(file), img = new Image();
+  img.onload = () => {
+    const c = document.createElement('canvas'); c.width = c.height = 160;
+    const g = c.getContext('2d');
+    URL.revokeObjectURL(url);
+    if (!g) { toast(T('err.badImage'), 'err'); return; }
+    const s = Math.min(img.width, img.height);
+    g.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, 160, 160);
+    saveAvatar(c.toDataURL('image/jpeg', 0.85));
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); toast(T('err.badImage'), 'err'); };
+  img.src = url;
+}
+const notifLabel = () => !('Notification' in window) ? T('notifUnsupported')
+  : Notification.permission === 'granted' ? T('notifOn')
+  : Notification.permission === 'denied' ? T('notifDenied') : T('enableNotif');
+
+// ---------- Reminders: browser notifications (when granted) and one in-app greeting per day ----------
+const NOTIF_KEY = 'earnit.notif';
+function remindersTick() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  let seen = [];
+  try { seen = JSON.parse(ls()?.getItem(NOTIF_KEY) || '[]'); } catch {}
+  const td = today(), fresh = [];
+  S.tasks.filter(t => t.status === 'pending' && t.due === td).forEach(t => fresh.push({ k: 'due:' + t.id + ':' + td, title: T('notifDue'), body: t.title }));
+  MISSIONS.forEach(m => { if (missionState(S, m).ready) fresh.push({ k: 'mis:' + missionKey(m, bounds(m.period).key), title: T('notifMission'), body: T('mis.' + m.id) }); });
+  fresh.filter(n => !seen.includes(n.k)).forEach(n => { new Notification('EARN IT', { body: `${n.title}: ${n.body}`, tag: n.k }); seen.push(n.k); });
+  try { ls()?.setItem(NOTIF_KEY, JSON.stringify(seen.slice(-200))); } catch {}
+}
+function greet() {
+  const td = today(), due = S.tasks.filter(t => t.status === 'pending' && t.due === td).length;
+  if (due && ls()?.getItem('earnit.greet') !== td) { try { ls().setItem('earnit.greet', td); } catch {} toast(`${T('dueToday')} ${due}`, 'ok'); }
+}
+
+// ---------- Data ----------
+function exportData() {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' }));
+  const a = Object.assign(document.createElement('a'), { href: url, download: 'earn-it-export.json' });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  ok('exported');
+}
+function exportCsv() {
+  const safe = s => (/^[=+\-@]/.test(String(s)) ? "'" + s : String(s));
+  const cell = v => `"${String(v).replace(/"/g, '""')}"`;
+  const rows = [[T('date'), T('type'), T('desc'), 'EGP', T('after')],
+    ...S.ledger.map(e => [new Date(e.ts).toISOString(), T('ltype.' + e.type), safe(e.desc), (e.amount / 100).toFixed(2), (e.after / 100).toFixed(2)])];
+  const blob = new Blob(['\ufeff' + rows.map(r => r.map(cell).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: 'earn-it-ledger.csv' });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  ok('csvDone');
+}
+async function resetAll() {
+  if (!(await confirmBox(T('resetConfirm')))) return false;
+  const f = freshState();
+  if (!persist(f)) { toast(T('err.storage'), 'err'); return false; }
+  S = f; ok('resetDone'); return true;
+}
+
+// ---------- Modal (replaces native confirm; keyboard accessible) ----------
+const modalEl = () => $('#modal');
+function openModal(html) {
+  const m = modalEl();
+  m.innerHTML = `<div class="panel" role="dialog" aria-modal="true">${html}</div>`;
+  m.hidden = false;
+  (m.querySelector('input,select') || m.querySelector('button'))?.focus();
+}
+function closeModal(v = false) {
+  const m = modalEl(), res = m._res;
+  m._res = null; m.hidden = true; m.innerHTML = '';
+  if (res) res(v);
+}
+function confirmBox(msg) {
+  return new Promise(res => {
+    openModal(`<p>${esc(msg)}</p><div class="actions" style="justify-content:flex-end"><button type="button" data-act="modal-no">${T('cancel')}</button><button class="primary" type="button" data-act="modal-ok">${T('ok')}</button></div>`);
+    modalEl()._res = res;
+  });
+}
+function editTaskModal(id) {
+  const t = S.tasks.find(x => x.id === id);
+  if (!t) return;
+  openModal(`<h3>${T('editTask')}</h3><form data-form="edit" data-id="${t.id}">
+    <label>${T('title')}<input name="title" required maxlength="200" value="${esc(t.title)}"></label>
+    <label>${T('difficulty')}<select name="difficulty">${Object.keys(DIFF).map(k => `<option value="${k}" ${k === t.difficulty ? 'selected' : ''}>${T(k)}</option>`).join('')}</select></label>
+    <label>${T('reward')}<input name="reward" inputmode="decimal" value="${(t.reward / 100).toFixed(2)}"></label>
+    <label>${T('repeat')}<select name="freq">${['none', 'daily', 'weekly'].map(k => `<option value="${k}" ${k === t.freq ? 'selected' : ''}>${T('freq.' + k)}</option>`).join('')}</select></label>
+    <label>${T('due')}<input type="date" name="due" value="${esc(t.due)}"></label>
+    <div class="actions" style="justify-content:flex-end"><button type="button" data-act="modal-no">${T('cancel')}</button><button class="primary" type="submit">${T('save')}</button></div>
+  </form>`);
+}
+
+// ---------- Views ----------
+function stats() {
+  const t0 = startOfToday(), td = today();
+  const dayTasks = S.tasks.filter(t => t.due === td);
+  const doneDay = dayTasks.filter(t => t.status === 'completed').length;
+  return {
+    todayEarn: S.ledger.filter(e => (e.type === 'task_reward' || e.type === 'reversal') && e.ts >= t0).reduce((a, e) => a + e.amount, 0),
+    pct: dayTasks.length ? Math.round(doneDay / dayTasks.length * 100) : null,
+    done: doneCount(S),
+    pending: S.tasks.filter(t => t.status === 'pending').length,
+    overdue: S.tasks.filter(t => t.status === 'pending' && t.due && t.due < td).length,
+  };
+}
+const stat = (label, value, cls = '') => `<div class="card stat"><small>${label}</small><b class="${cls}">${value}</b></div>`;
+const ledgerLine = e => `<div class="row"><div><b>${esc(e.desc)}</b><div class="muted">${T('ltype.' + e.type)} · ${fmtDate(e.ts)}</div></div><b class="${e.amount > 0 ? 'pos' : 'neg'}">${sign(e.amount)}</b></div>`;
+function taskRow(t) {
+  const late = t.status === 'pending' && t.due && t.due < today();
+  const rec = isRec(t);
+  const actions = t.status === 'pending'
+    ? `<button type="button" data-act="edit" data-id="${t.id}">${T('edit')}</button>
+       <button type="button" data-act="postpone" data-id="${t.id}">${T('postpone')}</button>
+       <button type="button" data-act="dup" data-id="${t.id}">${T('duplicate')}</button>
+       <button class="primary" type="button" data-act="complete" data-id="${t.id}">${T('complete')}</button>
+       <button class="danger" type="button" data-act="deltask" data-id="${t.id}">${T('delete')}</button>`
+    : `<span class="tag pos">✓ ${T('done')}</span>`;
+  return `<div class="row ${t.status === 'completed' ? 'done' : ''}">
+    <div><b>${esc(t.title)}</b><div class="muted"><span class="tag">${T(t.difficulty)}</span> ${rec ? `<span class="tag">🔁 ${T('freq.' + t.freq)}</span> ` : ''}${esc(t.due)} ${late ? `<span class="neg">${T('overdue')}</span>` : ''}${rec && t.history.length ? ` · ${t.history.length} ${T('times')}` : ''}</div></div>
+    <div class="actions"><b class="pos">${fmt(t.reward)}</b>${actions}</div></div>`;
+}
+function taskList() {
+  const q = ui.q.trim().toLowerCase(), f = ui.filter, td = today();
+  const keep = t => (!q || t.title.toLowerCase().includes(q)) && (
+    f === 'all' ? true : f === 'completed' ? t.status === 'completed' : f === 'pending' ? t.status === 'pending' : t.status === 'pending' && t.due && t.due < td);
+  const cmp = { due: (a, b) => (a.due || '9999').localeCompare(b.due || '9999'), reward: (a, b) => b.reward - a.reward, title: (a, b) => a.title.localeCompare(b.title, loc()) }[ui.sort];
+  return S.tasks.filter(keep).slice().sort(cmp).map(taskRow).join('') || `<p class="muted">${T('noTasks')}</p>`;
+}
+function weekChart() {
+  const base = new Date(); base.setHours(0, 0, 0, 0);
+  const days = [...Array(7)].map((_, i) => { const d = new Date(base); d.setDate(base.getDate() - 6 + i); return d; });
+  const vals = days.map(d => {
+    const a = d.getTime(), b = new Date(d).setDate(d.getDate() + 1);
+    return S.ledger.filter(e => e.type === 'task_reward' && e.ts >= a && e.ts < b).reduce((sum, e) => sum + e.amount, 0);
+  });
+  const max = Math.max(1, ...vals), W = 420, H = 150, bw = 36, gap = (W - 7 * bw) / 7, wd = new Intl.DateTimeFormat(loc(), { weekday: 'short' });
+  const bars = vals.map((v, i) => {
+    const h = Math.round(v / max * (H - 36)), x = gap / 2 + i * (bw + gap);
+    return `<rect x="${x}" y="${H - 22 - h}" width="${bw}" height="${h}" rx="7" fill="url(#eg)"><title>${fmt(v)}</title></rect>
+      <text x="${x + bw / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="currentColor" opacity=".7">${wd.format(days[i])}</text>`;
+  }).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${T('weekly')}" style="color:var(--muted)">
+    <defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gold2)"/><stop offset="1" style="stop-color:var(--gold)"/></linearGradient></defs>${bars}</svg>`;
+}
+const VIEWS = {
+  dashboard() {
+    const s = stats(), lv = levelOf(S.xp), cur = xpForLevel(lv), nxt = xpForLevel(lv + 1);
+    const pct = lv >= 50 ? 100 : Math.round((S.xp - cur) / (nxt - cur) * 100);
+    const recent = S.ledger.slice(0, 5).map(ledgerLine).join('') || `<p class="muted">${T('none')}</p>`;
+    const upcoming = S.tasks.filter(t => t.status === 'pending')
+      .sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999')).slice(0, 5)
+      .map(t => `<div class="row"><span>${esc(t.title)}</span><span class="muted">${esc(t.due) || '—'}</span></div>`).join('')
+      || `<p class="muted">${T('none')}</p>`;
+    const badges = ACH.map(a => `<div class="badge r-${a.r} ${S.achievements.includes(a.id) ? '' : 'off'}" title="${esc(T('ach.' + a.id + '.d'))}">
+      <b>${esc(T('ach.' + a.id + '.n'))}</b><span class="muted">${T('rarity.' + a.r)}</span></div>`).join('');
+    return `
+    <div class="grid">
+      ${stat(T('balance'), fmt(S.balance), 'pos')}${stat(T('todayEarn'), fmt(s.todayEarn))}${stat(T('lifetime'), fmt(S.lifetime))}
+      ${stat(T('saved'), fmt(S.savings))}${stat(T('spending'), fmt(S.spending))}${stat(T('completion'), s.pct === null ? '—' : s.pct + '%')}
+    </div>
+    <div class="grid" style="margin-top:14px">
+      ${stat(T('done'), s.done)}${stat(T('pending'), s.pending)}${stat(T('overdue'), s.overdue, s.overdue ? 'neg' : '')}
+      ${stat(T('streak'), '🔥 ' + streakOf(S) + ' ' + T('days'))}
+    </div>
+    <div class="grid two" style="margin-top:14px">
+      <section class="card"><h3>${T('level')} ${lv} · ${titleOf(lv)}</h3>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>
+        <p class="muted">${S.xp} ${T('xp')}${lv >= 50 ? ` · ${T('maxLevel')}` : ` · ${nxt - S.xp} ${T('xp')} ${T('nextLevel')}`}</p></section>
+      <section class="card"><h3>${T('weekly')}</h3>${weekChart()}</section>
+    </div>
+    <div class="grid two" style="margin-top:14px">
+      <section class="card"><h3>${T('recent')}</h3>${recent}</section>
+      <section class="card"><h3>${T('upcoming')}</h3>${upcoming}</section>
+    </div>
+    <section class="card"><h3>${T('achievements')} · ${S.achievements.length}/${ACH.length}</h3><div class="badges">${badges}</div></section>
+    ${missionsCard()}
+    <section class="card"><h3>${T('quick')}</h3><div class="actions">
+      <button class="primary" type="button" data-act="tab" data-tab="tasks">+ ${T('nav.tasks')}</button>
+      <button type="button" data-act="tab" data-tab="shop">${T('nav.shop')}</button>
+      <button type="button" data-act="tab" data-tab="savings">${T('nav.savings')}</button>
+      <button type="button" data-act="tab" data-tab="wallet">${T('nav.wallet')}</button>
+    </div><p class="muted" style="margin:10px 0 0">${T('shortcuts')}</p></section>`;
+  },
+
+  tasks() {
+    const filters = Object.keys(FILTERS).map(k => `<button type="button" data-act="filter" data-f="${k}" ${ui.filter === k ? 'aria-current="true"' : ''}>${T(FILTERS[k])}</button>`).join('');
+    const sorts = [['due', 'sortDue'], ['reward', 'sortReward'], ['title', 'sortTitle']].map(([v, k]) => `<option value="${v}" ${ui.sort === v ? 'selected' : ''}>${T(k)}</option>`).join('');
+    return `
+    <section class="card"><form data-form="task">
+      <label style="flex:2 1 220px">${T('title')}<input name="title" required maxlength="200" style="width:100%"></label>
+      <label>${T('difficulty')}<select name="difficulty">${Object.keys(DIFF).map(k => `<option value="${k}">${T(k)}</option>`).join('')}</select></label>
+      <label>${T('repeat')}<select name="freq">${['none', 'daily', 'weekly'].map(k => `<option value="${k}">${T('freq.' + k)}</option>`).join('')}</select></label>
+      <label>${T('reward')}<input name="reward" inputmode="decimal" value="${mid('easy')}" style="width:120px"></label>
+      <label>${T('due')}<input type="date" name="due"></label>
+      <button class="primary" type="submit">${T('add')}</button>
+    </form></section>
+    <section class="card">
+      <div class="actions" style="margin-bottom:10px">
+        <input type="search" id="q" value="${esc(ui.q)}" placeholder="${T('search')}" aria-label="${T('search')}" style="flex:1 1 200px">
+        <select id="sort" aria-label="${T('sort')}">${sorts}</select>
+      </div>
+      <div class="actions" style="margin-bottom:6px">${filters}</div>
+      <div id="tlist">${taskList()}</div>
+    </section>`;
+  },
+
+  focus() {
+    const left = leftNow(), day0 = startOfToday();
+    const mins = S.focus.filter(f => f.ts >= day0).reduce((a, f) => a + f.min, 0);
+    const opts = S.tasks.filter(t => t.status === 'pending').map(t => `<option value="${t.id}" ${FOCUS.tid === t.id ? 'selected' : ''}>${esc(t.title)}</option>`).join('');
+    const hist = S.focus.slice(0, 6).map(f => `<div class="row"><span>${fmtDate(f.ts)}</span><span class="muted">${f.min} ${T('minutes')}${f.tid ? ' · ' + esc(taskTitle(f.tid)) : ''}</span></div>`).join('') || `<p class="muted">${T('none')}</p>`;
+    return `
+    <section class="card focus">
+      <h3 style="text-align:center">${T('focusHeading')}</h3>
+      <div class="timer" id="ftime">${fmtClock(left)}</div>
+      <p class="muted" style="text-align:center;margin:0">${T('focusHint')}</p>
+      <div class="actions" style="justify-content:center">
+        <select id="flen" aria-label="${T('duration')}" ${FOCUS.timer ? 'disabled' : ''}>${[15, 25, 45, 60].map(n => `<option value="${n}" ${FOCUS.len === n ? 'selected' : ''}>${n} ${T('minutes')}</option>`).join('')}</select>
+        <select id="ftask" aria-label="${T('linkTask')}"><option value="">${T('noTask')}</option>${opts}</select>
+      </div>
+      <div class="actions" style="justify-content:center">
+        <button class="primary" type="button" data-act="fstart">${FOCUS.timer ? T('pause') : T('start')}</button>
+        <button type="button" data-act="freset">${T('reset')}</button>
+      </div>
+      <p class="muted" style="text-align:center;margin:0">${T('todayFocus')}: ${mins} ${T('minutes')}</p>
+    </section>
+    <section class="card"><h3>${T('sessions')}</h3>${hist}</section>`;
+  },
+
+  calendar() {
+    if (!ui.cal.date) ui.cal.date = today();
+    const [from, to] = calRange(), ev = calEvents(from, to), m = ui.cal.mode, d = ui.cal.date, td = today();
+    const dname = new Intl.DateTimeFormat(loc(), { weekday: 'short' });
+    const head = m === 'month' ? new Intl.DateTimeFormat(loc(), { month: 'long', year: 'numeric' }).format(new Date(d + 'T00:00:00'))
+      : m === 'day' ? new Intl.DateTimeFormat(loc(), { dateStyle: 'full' }).format(new Date(d + 'T00:00:00'))
+      : `${fmtShort(from)} – ${fmtShort(to)}`;
+    const modes = ['day', 'week', 'month'].map(k => `<button type="button" data-act="calmode" data-m="${k}" ${m === k ? 'aria-current="true"' : ''}>${T('cal.' + k)}</button>`).join('');
+    const nav = `<div class="actions" style="justify-content:space-between">
+      <div class="actions"><button type="button" data-act="calnav" data-dir="-1">‹ ${T('cal.prev')}</button><button type="button" data-act="calnav" data-dir="0">${T('cal.today')}</button><button type="button" data-act="calnav" data-dir="1">${T('cal.next')} ›</button></div>
+      <div class="actions">${modes}</div></div>`;
+    let body;
+    if (m === 'day') {
+      body = (ev[d] || []).map(e => `<div class="row"><span class="chip ${e.k}">${T('cal.' + e.k)}</span><span>${esc(e.t)}</span></div>`).join('') || `<p class="muted">${T('cal.noEvents')}</p>`;
+    } else {
+      const n = m === 'week' ? 7 : 42;
+      body = `<div class="wk">${Array.from({ length: n }, (_, i) => {
+        const day = addDays(from, i), list = ev[day] || [], out = m === 'month' && day.slice(0, 7) !== d.slice(0, 7);
+        const chips = list.slice(0, m === 'week' ? 12 : 2).map(e => `<span class="chip ${e.k}" title="${esc(e.t)}">${esc(e.t)}</span>`).join('')
+          + (m === 'month' && list.length > 2 ? `<span class="muted">+${list.length - 2}</span>` : '');
+        const label = m === 'week' ? `${dname.format(new Date(day + 'T00:00:00'))} ${Number(day.slice(8))}` : String(Number(day.slice(8)));
+        const cls = `cell ${out ? 'out' : ''} ${day === td ? 'today' : ''}`;
+        return m === 'month'
+          ? `<button type="button" class="${cls}" data-act="calday" data-d="${day}"><b>${label}</b>${chips}</button>`
+          : `<div class="${cls}"><b>${label}</b>${chips}</div>`;
+      }).join('')}</div>`;
+    }
+    return `<section class="card">${nav}<h3 style="margin-top:12px">${esc(head)}</h3>${body}</section>`;
+  },
+
+  analytics() {
+    const D = analyticsData(ui.range);
+    const chips = [1, 7, 30, 90].map(r => `<button type="button" data-act="range" data-r="${r}" ${ui.range === r ? 'aria-current="true"' : ''}>${T('range.' + r)}</button>`).join('');
+    return `
+    <div class="actions">${chips}</div>
+    <div class="grid" style="margin-top:14px">
+      ${stat(T('earnedRange'), fmt(D.earned), 'pos')}${stat(T('spentRange'), fmt(D.spent))}${stat(T('savedRange'), fmt(D.saved))}
+      ${stat(T('focusRange'), `${D.focus} ${T('minutes')}`)}${stat(T('doneRange'), D.done)}
+    </div>
+    <div class="grid two" style="margin-top:14px">
+      <section class="card"><h3>${T('trend')}</h3>${barChart(D.trendLabels, D.trend)}</section>
+      <section class="card"><h3>${T('byDiff')}</h3>${hbars(D.byDiff)}</section>
+    </div>
+    <section class="card"><h3>${T('bySpend')}</h3>${hbars(D.bySpend)}</section>`;
+  },
+
+  profile() {
+    const rep = ui.rep, cur = bounds(rep), prev = bounds(rep, -1);
+    const now = reportOf(cur.a, cur.b), old = reportOf(prev.a, prev.b);
+    const delta = (x, y) => { if (!y) return x ? '▲ new' : '—'; const p = Math.round((x - y) / Math.abs(y) * 100); return `${p >= 0 ? '▲ +' : '▼ '}${p}%`; };
+    const card = (k, lbl, f) => `<div class="card stat"><small>${lbl}</small><b>${f(now[k])}</b><div class="muted">${delta(now[k], old[k])}</div></div>`;
+    return `
+    <section class="card prof-head">${avatarHTML(112)}<div style="flex:1 1 260px">
+      <h2 style="margin:0">${esc(S.profile.name || T('guest'))}</h2>
+      <form data-form="profile" class="profile-form">
+        <label style="flex:1">${T('displayName')}<input name="name" maxlength="40" value="${esc(S.profile.name)}" style="width:100%"></label>
+        <button class="primary" type="submit">${T('save')}</button>
+      </form>
+      <div class="actions" style="margin-top:10px">
+        <label class="btn-like">${T('changeAvatar')}<input type="file" name="avatar" accept="image/*" hidden></label>
+        ${S.profile.avatar ? `<button type="button" data-act="avremove">${T('removeAvatar')}</button>` : ''}
+        <button type="button" data-act="notify">${notifLabel()}</button>
+      </div>
+      <p class="muted" style="margin:8px 0 0">${T('framesHint')}</p>
+      <p class="muted" style="margin:4px 0 0">${T('installHint')}</p>
+    </div></section>
+    <section class="card">
+      <div class="actions" style="justify-content:space-between"><h3 style="margin:0">${T('reports')}</h3>
+        <div class="actions">
+          <button type="button" data-act="rep" data-r="week" ${rep === 'week' ? 'aria-current="true"' : ''}>${T('week')}</button>
+          <button type="button" data-act="rep" data-r="month" ${rep === 'month' ? 'aria-current="true"' : ''}>${T('month')}</button>
+        </div></div>
+      <p class="muted">${T('vsPrev')}</p>
+      <div class="grid">${card('done', T('rep.done'), String)}${card('earned', T('rep.earned'), fmt)}${card('spent', T('rep.spent'), fmt)}${card('saved', T('rep.saved'), fmt)}${card('focus', T('rep.focus'), v => `${v} ${T('minutes')}`)}${card('missions', T('rep.missions'), String)}</div>
+    </section>`;
+  },
+
+  shop() {
+    const cards = S.rewards.filter(r => !r.archived).map(r => {
+      const can = S.balance >= r.price;
+      return `<section class="card"><b>${esc(r.name)}</b><div class="muted">${T('cats.' + r.category)}</div>
+        <div class="row" style="border:0;padding:8px 0 0"><b>${fmt(r.price)}</b>
+        <div class="actions"><button class="primary" type="button" data-act="buy" data-id="${r.id}" ${can ? '' : 'disabled'}>${T('buy')}</button>
+        <button class="danger" type="button" data-act="archreward" data-id="${r.id}">${T('archive')}</button></div></div>
+        ${can ? '' : `<p class="neg" style="margin:6px 0 0;font-size:.85rem">${T('err.insufficient')}</p>`}</section>`;
+    }).join('');
+    const hist = S.purchases.map(p => `<div class="row"><div><b>${esc(p.name)}</b><div class="muted">${fmtDate(p.ts)}</div></div>
+      <div class="actions"><span class="tag">${p.status === 'redeemed' ? T('statusRedeemed') : p.status === 'refunded' ? T('statusRefunded') : T('purchased')}</span>
+      ${p.status === 'purchased' ? `<button type="button" data-act="redeem" data-id="${p.id}">${T('redeem')}</button>` : ''}</div></div>`).join('');
+    return `
+    <section class="card"><h3>${T('newReward')}</h3><form data-form="reward">
+      <label>${T('rewardName')}<input name="name" required maxlength="120"></label>
+      <label>${T('category')}<select name="category">${CATS.map(c => `<option value="${c}">${T('cats.' + c)}</option>`).join('')}</select></label>
+      <label>${T('price')}<input name="price" inputmode="decimal" required style="width:120px"></label>
+      <button class="primary" type="submit">${T('add')}</button>
+    </form></section>
+    <section class="grid" style="margin-top:14px">${cards || `<p class="muted">${T('noRewards')}</p>`}</section>
+    ${cosSection()}<section class="card"><h3>${T('purchases')}</h3>${hist || `<p class="muted">${T('none')}</p>`}</section>`;
+  },
+
+  savings() {
+    const goals = S.goals.map(g => {
+      const pct = Math.min(100, Math.round(g.saved / g.target * 100));
+      return `<section class="card goal"><div class="row" style="border:0;padding:0"><b>${esc(g.name)}</b>
+        <span class="tag ${g.status === 'completed' ? 'pos' : ''}">${g.status === 'completed' ? T('goalDone') : pct + '%'}</span></div>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>
+        <p class="muted">${fmt(g.saved)} / ${fmt(g.target)}${g.date ? ' · ' + esc(g.date) : ''}</p>
+        <div class="actions"><input inputmode="decimal" placeholder="${T('amount')}" aria-label="${T('amount')}" style="width:130px">
+          <button class="primary" type="button" data-act="dep" data-id="${g.id}" ${g.status === 'active' ? '' : 'disabled'}>${T('deposit')}</button>
+          <button type="button" data-act="wd" data-id="${g.id}">${T('withdraw')}</button></div></section>`;
+    }).join('');
+    return `
+    <section class="card"><h3>${T('newGoal')}</h3><form data-form="goal">
+      <label>${T('goal')}<input name="name" required maxlength="120"></label>
+      <label>${T('target')}<input name="target" inputmode="decimal" required style="width:150px"></label>
+      <label>${T('targetDate')}<input type="date" name="date"></label>
+      <button class="primary" type="submit">${T('add')}</button>
+    </form></section>
+    <div class="grid" style="margin-top:14px">${goals || `<p class="muted">${T('noGoals')}</p>`}</div>`;
+  },
+
+  wallet() {
+    const rows = S.ledger.slice(0, 200).map(e => `<tr><td>${fmtDate(e.ts)}</td><td>${T('ltype.' + e.type)}</td><td>${esc(e.desc)}</td>
+      <td class="${e.amount > 0 ? 'pos' : 'neg'}">${sign(e.amount)}</td><td>${fmt(e.after)}</td></tr>`).join('');
+    return `
+    <section class="card"><div class="row" style="border:0">
+      <div><span class="muted">${T('balance')}</span><h3 style="font-size:1.6rem;margin:4px 0">${fmt(S.balance)}</h3></div>
+      <div class="actions"><button type="button" data-act="export">${T('exportData')}</button> <button type="button" data-act="csv">${T('exportCsv')}</button>
+      <button class="danger" type="button" data-act="reset">${T('resetData')}</button></div></div></section>
+    <section class="card" style="overflow:auto">${S.ledger.length
+      ? `<table><thead><tr><th>${T('date')}</th><th>${T('type')}</th><th>${T('desc')}</th><th>${T('amountCol')}</th><th>${T('after')}</th></tr></thead><tbody>${rows}</tbody></table>`
+      : `<p class="muted">${T('noLedger')}</p>`}</section>`;
+  },
+};
+
+// ---------- Rendering & events ----------
+function render() {
+  const root = document.documentElement;
+  root.lang = ui.lang; root.dir = ui.lang === 'ar' ? 'rtl' : 'ltr'; root.dataset.theme = ui.theme;
+  $('#tag').textContent = T('tagline');
+  $('#langBtn').textContent = T('lang');
+  $('#themeBtn').textContent = T(ui.theme === 'dark' ? 'toLight' : 'toDark');
+  $('#nav').innerHTML = ['dashboard', 'tasks', 'calendar', 'focus', 'analytics', 'shop', 'savings', 'wallet', 'profile'].map(t =>
+    `<button type="button" data-act="tab" data-tab="${t}" ${ui.tab === t ? 'aria-current="page"' : ''}>${T('nav.' + t)}</button>`).join('');
+  const banner = ui.banner ? `<div class="banner" role="alert">${T(ui.banner)}</div>` : '';
+  ui.banner = '';
+  applyCos();
+  $('#hav').innerHTML = `<button type="button" class="hav" data-act="tab" data-tab="profile" aria-label="${T('nav.profile')}">${avatarHTML(36)}</button>`;
+  $('#app').innerHTML = banner + VIEWS[ui.tab]();
+}
+
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const { act, id } = el.dataset;
+  let r = true;
+  switch (act) {
+    case 'tab': ui.tab = el.dataset.tab; break;
+    case 'filter': ui.filter = el.dataset.f; break;
+    case 'lang': ui.lang = ui.lang === 'ar' ? 'en' : 'ar'; savePrefs(); break;
+    case 'theme': ui.theme = ui.theme === 'dark' ? 'light' : 'dark'; savePrefs(); break;
+    case 'complete': r = completeTask(id); break;
+    case 'deltask': r = (await confirmBox(T('deleteConfirm'))) ? deleteTask(id) : true; break;
+    case 'edit': editTaskModal(id); r = false; break;
+    case 'postpone': r = postponeTask(id); break;
+    case 'dup': r = duplicateTask(id); break;
+    case 'buy': r = (await confirmBox(T('confirmBuy'))) ? buy(id, uid()) : true; break;
+    case 'redeem': r = redeem(id); break;
+    case 'archreward': r = archiveReward(id); break;
+    case 'cosbuy': r = (await confirmBox(T('confirmBuy'))) ? buyCosmetic(id, uid()) : true; break;
+    case 'coseq': r = equipCos(id); break;
+    case 'fstart': FOCUS.timer ? focusPause() : focusStart(); break;
+    case 'freset': focusReset(); break;
+    case 'claim': r = claimMission(id); break;
+    case 'calnav': { const dir = Number(el.dataset.dir); ui.cal.date = dir === 0 ? today() : shiftCal(ui.cal.date || today(), ui.cal.mode, dir); break; }
+    case 'calmode': ui.cal.mode = el.dataset.m; break;
+    case 'calday': ui.cal.date = el.dataset.d; ui.cal.mode = 'day'; break;
+    case 'range': ui.range = Number(el.dataset.r); break;
+    case 'rep': ui.rep = el.dataset.r; break;
+    case 'avremove': r = removeAvatar(); break;
+    case 'notify': if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission(); break;
+    case 'dep': r = deposit(id, toP(el.closest('.goal').querySelector('input').value), uid()); break;
+    case 'wd': r = withdraw(id, toP(el.closest('.goal').querySelector('input').value), uid()); break;
+    case 'export': exportData(); break;
+    case 'csv': exportCsv(); break;
+    case 'reset': r = await resetAll(); break;
+    case 'modal-ok': closeModal(true); r = false; break;
+    case 'modal-no': closeModal(false); r = false; break;
+  }
+  if (r) render();
+});
+
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target)), form = e.target.dataset.form;
+  if (form === 'edit') { if (updateTask(e.target.dataset.id, f)) { closeModal(true); render(); } return; }
+  const action = { task: addTask, reward: addReward, goal: addGoal, profile: saveProfile }[form];
+  if (action && action(f)) render();
+});
+
+document.addEventListener('change', e => {
+  if (e.target.name === 'difficulty') e.target.form.elements.reward.value = mid(e.target.value);
+  if (e.target.id === 'sort') { ui.sort = e.target.value; $('#tlist').innerHTML = taskList(); }
+  if (e.target.id === 'flen') { FOCUS.len = Number(e.target.value); if (!FOCUS.timer) FOCUS.left = FOCUS.len * 60; render(); }
+  if (e.target.id === 'ftask') FOCUS.tid = e.target.value;
+  if (e.target.name === 'avatar') pickAvatar(e.target.files[0]);
+});
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'q') { ui.q = e.target.value; $('#tlist').innerHTML = taskList(); }
+});
+
+document.addEventListener('keydown', e => {
+  const m = modalEl();
+  if (!m.hidden) {
+    if (e.key === 'Escape') closeModal(false);
+    if (e.key === 'Tab') {
+      const f = [...m.querySelectorAll('input,select,button')], i = f.indexOf(document.activeElement);
+      e.preventDefault();
+      f[e.shiftKey ? (i <= 0 ? f.length - 1 : i - 1) : (i < 0 || i === f.length - 1 ? 0 : i + 1)]?.focus();
+    }
+    return;
+  }
+  if (e.ctrlKey || e.metaKey || e.altKey || e.target.matches('input,textarea,select')) return;
+  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); ui.tab = 'tasks'; render(); $('input[name=title]')?.focus(); }
+  else if (e.key === '/') { e.preventDefault(); ui.tab = 'tasks'; render(); $('#q')?.focus(); }
+});
+
+modalEl().addEventListener('click', e => { if (e.target === modalEl()) closeModal(false); });
+loadPrefs();
+S = loadState();
+render();
+greet();
+remindersTick();
+setInterval(remindersTick, 60000);
+if ('serviceWorker' in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "EARN IT",
+  "short_name": "EARN IT",
+  "description": "Turn real tasks into a virtual economy: missions, focus sessions, and a customization store.",
+  "start_url": "./earn-it.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0b0d",
+  "theme_color": "#0b0b0d",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
